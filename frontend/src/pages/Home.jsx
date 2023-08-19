@@ -1,15 +1,49 @@
-import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
+import { useParams } from "react-router-dom";
+import { UserContext } from '../App';
 
 const Home = () => {
-  const location = useLocation();
+  // Check if userData is available in location state
+  const { userData, setUserData, walletStatus, setWalletStatus } = useContext(UserContext)
+  const profileImageSource = userData ? "../" + userData.rows[0].IMAGE : "";
+  // After fetching and setting the data
+  const {userID}  = useParams();
+  // useEffect(() => {
+  //   reloadData();
+  //   reloadWallet();
+  // },[]); //if I use userData as dependancy it creates infinite loop
+  useEffect(() => {
+    reloadData()
+      .then(() => reloadWallet())
+      .catch(error => {
+        // Handle errors here if needed
+        console.error("An error occurred:", error);
+      });
+  }, []);
+  const reloadData = async () => {
+    try {
+      console.log(userID);
+      const response = await fetch(`http://localhost:3000/getUserData?id=${userID}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-  // Check if fetchedData is available in location state
-  const fetchedData = location.state && location.state.fetchedData;
-  const profileImageSource = fetchedData ? "../" + fetchedData.rows[0][6] : "";
-  const [walletStatus, setWalletStatus] = useState(fetchedData ? fetchedData.rows[0][11] : '');
+      if (!response.ok) {
+        console.error("Network response was not ok");
+      }
 
-  // Function to reload wallet status
+      const data = await response.json();
+      console.log('Here we go');
+      setUserData(data);
+      console.table(data);
+
+    } catch (error) {
+      console.log("Error:", error);
+    }
+
+  }
   const reloadWallet = async () => {
     try {
       const response = await fetch("http://localhost:3000/getWalletStatus", {
@@ -17,7 +51,7 @@ const Home = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id: fetchedData.rows[0][0] }),
+        body: JSON.stringify({ id: userID }),
       });
 
       if (!response.ok) {
@@ -26,7 +60,8 @@ const Home = () => {
       }
 
       const data = await response.json();
-      setWalletStatus(data.rows[0]);
+      console.log(data.rows[0].TOTAL_CREDITS);
+      setWalletStatus(data.rows[0].TOTAL_CREDITS);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -36,11 +71,11 @@ const Home = () => {
       <div className="row">
         <div className="col-md-8">
           <div className="card">
-            <div className="card-header bg-primary text-white">
+            <div className="card-header bg-success text-white">
               <h5 className="mb-0">FAKESHOP Profile</h5>
             </div>
             <div className="card-body">
-              {fetchedData ? (
+              {userData ? (
                 <div className="d-flex">
                   <img
                     src={profileImageSource}
@@ -50,23 +85,23 @@ const Home = () => {
                   />
                   <div className="d-flex flex-column">
                     <div className="mb-2">
-                      <strong>Name:</strong> {fetchedData.rows[0][1]}{' '}
-                      {fetchedData.rows[0][2]}
+                      <strong>Name:</strong> {userData.rows[0].FIRST_NAME}{' '}
+                      {userData.rows[0].LAST_NAME}
                     </div>
                     <div className="mb-2">
-                      <strong>Email:</strong> {fetchedData.rows[0][13]}
+                      <strong>Email:</strong> {userData.rows[0].EMAIL_ID}
                     </div>
                     <div className="mb-2">
-                      <strong>Contact No:</strong> {fetchedData.rows[0][5]}
+                      <strong>Contact No:</strong> {userData.rows[0].CONTACT}
                     </div>
                     <div className="mb-2">
-                      <strong>Address:</strong> {fetchedData.rows[0][9]}, {fetchedData.rows[0][8]}, {fetchedData.rows[0][10]}
+                      <strong>Address:</strong> {userData.rows[0].APARTMENT_NUMBER}, {userData.rows[0].AREA}, {userData.rows[0].CITY}
                     </div>
                     {/* Wallet Status */}
                     <div>
                       <strong>Wallet Status:</strong> {walletStatus}
                     </div>
-                    <button className="btn btn-primary mt-3" onClick={reloadWallet}>
+                    <button className="btn btn-success mt-3" onClick={reloadWallet}>
                       Reload Wallet
                     </button>
                   </div>
@@ -80,13 +115,13 @@ const Home = () => {
         <div className="col-md-4">
           <div className="card">
             <div className="card-body">
-            <h5>My Account</h5>
+              <h5>My Account</h5>
               <ul className="list-group">
                 {/* Hover Animation */}
                 <li
                   className="list-group-item"
                   style={{
-                    background: '#303030',
+                    background: 'grey',
                     transition: 'background-color 0.3s',
                   }}
                 >
@@ -94,7 +129,7 @@ const Home = () => {
                     href="#"
                     className="text-light text-decoration-none"
                     style={{ display: 'block' }}
-                    onMouseEnter={e => (e.target.style.backgroundColor = '#FFA500')}
+                    onMouseEnter={e => (e.target.style.backgroundColor = 'grey')}
                     onMouseLeave={e =>
                       (e.target.style.backgroundColor = '#303030')
                     }
@@ -106,7 +141,7 @@ const Home = () => {
                 <li
                   className="list-group-item"
                   style={{
-                    background: '#303030',
+                    background: 'grey',
                     transition: 'background-color 0.3s',
                   }}
                 >

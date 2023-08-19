@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { UserContext } from '../App';
 // import Validation from '../assets/LoginValidation';
 
 const LogIn = () => {
@@ -7,10 +8,9 @@ const LogIn = () => {
         email: '',
         password: ''
     });
-    const [responseMessage, setResponseMessage] = useState("");
-
+    const [userID,setUserid] = useState(0);
     const navigate = useNavigate();
-
+    const { setUserData} = useContext(UserContext);
     const handleSubmit = async (event) => {
         event.preventDefault();
             try {
@@ -28,8 +28,11 @@ const LogIn = () => {
 
                 const data = await response.json();
                 console.table(data);
-                setResponseMessage(JSON.stringify(data.rows[0][1]) + JSON.stringify(data.rows[0][2]));
-                navigate('/home', { state: { fetchedData: data } });
+                // setUserData(data);
+                setUserid(data.rows[0].USER_ID);
+                {console.log('here '+data.rows[0].USER_ID)}
+                // setResponseMessage(JSON.stringify(data.rows[0][1]) + JSON.stringify(data.rows[0][2]));
+                navigate(`/home/${data.rows[0].USER_ID}`);
 
             } catch (error) {
                 console.error("Error:", error);
@@ -58,7 +61,7 @@ const LogIn = () => {
                         <p>You are agreeing to our terms and conditions</p>
                         <Link to="/signup" className="btn btn-default border w-100 bg-light rounded-0 text-decoration-none">Create Account</Link>
                     </form>
-                    {responseMessage && <p>{responseMessage}</p>}
+                    {/* {responseMessage && <p>{responseMessage}</p>} */}
                 </div>
             </div>
         </>

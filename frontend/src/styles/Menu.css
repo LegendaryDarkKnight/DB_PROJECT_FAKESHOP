@@ -1,0 +1,30 @@
+/* Neon color effect */
+.nav-link {
+    position: relative;
+    color: #000;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.nav-link::before {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #39f12f; /* Neon green color */
+    visibility: hidden;
+    transform: scaleX(0);
+    transition: transform 0.3s ease, visibility 0.3s;
+}
+
+.nav-link:hover {
+    color: #39f12f; /* Neon green color */
+}
+
+.nav-link:hover::before {
+    visibility: visible;
+    transform: scaleX(1);
+}
+/* Center align the search bar */

@@ -21,7 +21,7 @@ const Signup = () => {
                         </div>
                         <button className="btn btn-success">Sign Up</button>
                         <p>You are agreeing to our terms and conditions</p>
-                        <Link to="/" className="btn btn-default border w-100 bg-light rounded-0 text-decoration-none">Account exists?</Link>
+                        <Link to="/login" className="btn btn-default border w-100 bg-light rounded-0 text-decoration-none">Account exists?</Link>
                     </form>
                 </div>
             </div>
