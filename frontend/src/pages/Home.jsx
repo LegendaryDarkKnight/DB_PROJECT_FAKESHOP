@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect} from 'react';
 import { useParams } from "react-router-dom";
 import { UserContext } from '../App';
 
@@ -8,15 +8,10 @@ const Home = () => {
   const profileImageSource = userData ? "../" + userData.rows[0].IMAGE : "";
   // After fetching and setting the data
   const {userID}  = useParams();
-  // useEffect(() => {
-  //   reloadData();
-  //   reloadWallet();
-  // },[]); //if I use userData as dependancy it creates infinite loop
   useEffect(() => {
     reloadData()
       .then(() => reloadWallet())
       .catch(error => {
-        // Handle errors here if needed
         console.error("An error occurred:", error);
       });
   }, []);
