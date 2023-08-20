@@ -1,0 +1,81 @@
+PRODUCT_ID,CATEGORY,DESCRIPTION,STOCK,PRICE,RATING,SHOP_ID,PRODUCT_NAME
+1000000001,Laptop,"Model: Latitude 14 3420
+Processor: Intel Core i5-1135G7 (8MB Cache, 2.40 GHz up to 4.20 GHz)
+RAM: 8GB 3200MHz DDR4, Storage: 512GB SSD
+Display: 14"" FHD (1920 x 1080)
+Features: microSD-card slot, Type-C port",20,82500,4.5,1000000008,"Dell Latitude 14 3420 Core i5 11th Gen 14"" FHD Laptop"
+1000000002,Laptop,"Model: IdeaPad Slim 3i
+Processor: Intel Celeron N4020 (4M Cache, 1.10 GHz up to 2.80 GHz)
+Ram: 4GB DDR4, Storage: 1TB HDD
+Display: 15.6"" HD (1366 x 768)",17,70000,3.9,1000000008,"Lenovo IdeaPad Slim 3i Intel Celeron N4020 15.6"" HD Laptop"
+1000000003,Laptop,"Model: Dynabook Satellite Pro C40-G-109
+Processor: Intel Celeron 5205U (2M Cache, 1.90 GHz)
+RAM: 4GB 3200MHz. Storage: 128GB SSD
+Display: 14"" HD (1,366 x 768)",11,55000,4.8,1000000009,"Toshiba Dynabook Satellite Pro C40-G-109 Celeron 5205U 14"" HD Laptop"
+1000000004,Laptop,"Model: Latitude 14 3420
+Processor: Intel Core i5-1135G7 (8MB Cache, 2.40 GHz up to 4.20 GHz)
+RAM: 8GB 3200MHz DDR4, Storage: 512GB SSD
+Display: 14"" FHD (1920 x 1080)
+Features: microSD-card slot, Type-C port",9,88900,3.7,1000000011,"Dell Latitude 14 3420 Core i5 11th Gen 14"" FHD Laptop"
+1000000005,Laptop,"Model: Freedom A9
+Processor: AMD A9-9425 (1MB Cache, 3.10GHz up to 3.70GHz)
+RAM: 4GB, Storage: 240GB SSD
+Display: 14.1"" HD (1366x768)
+Features: HD Webcam, TF Card slot, Type-C",1002,500,5.3,1000000011,"DOEL Freedom A9 AMD A9-9425 14.1"" HD Laptop"
+1000000006,Laptop,"Model: MacBook Air 13"" M1 Chip
+Processor: Apple M1 chip with 8-core CPU and 7-core GPU
+RAM: 8GB, Storage: 256GB SSD
+Display: 13.3-inch 2560x1600 LED-backlit Retina
+Features: Backlit Magic Keyboard",10,105000,4.1,1000000013,"Apple MacBook Air 13.3-Inch Retina Display 8-core Apple M1 chip with 8GB RAM, 256GB SSD (MGND3) Gold"
+1000000007,TV,"Model: 32N4010
+Display: 32-inch HD (1366 x 768)
+Audio: 2CH Speaker, 20W (RMS)
+Ports: 2x HDMI, 1x USB",9,20000,3.8,1000000011,"Samsung 32N4010 32"" Basic HD LED Television"
+1000000008,TV,"Model: 32LK510B
+32"" HD (1366 x 768) @50Hz LED-Backlit Display
+Dynamic Color & Virtual Surround Sound",11,17880,4.6,1000000009,"LG 32LK510B 32"" HD LED Television"
+1000000009,TV,"Model: Y1
+Display Size (inches, visible size): 32 inches
+Resolution: 1366 � 768 pixel
+RAM: 1GB, ROM: 8GB
+Dolby Digital: Dolby Audio",21,22499,4.4,1000000008,OnePlus 32 Y1 Y Series 32-Inch HD Smart Android LED Television
+1000000010,Printer,"Functions - Print Only
+Output Color - Black & White
+Print Speed (Black) - 22ppm",17,10409,3.5,1000000015,Pantum P2500W Single Function Mono Laser Printer
+1000000011,Printer,"Functions - Print Only
+Output Color - Black & White
+Print Speed (Black) - 20ppm",30,9800,4.9,1000000012,HP 107a Black & White Single Function Mono Laser Printer #4ZB77A
+1000000012,Dekstop,"Model: Athlon 200GE Desktop PC
+AMD Athlon 200GE AM4 Socket Desktop Processor with Radeon Vega 3 Graphics
+MSI A320M-A Pro AMD Micro-ATX Motherboard (C)
+TEAM T-FORCE VULCAN Z 256GB SATA SSD",11,18999,4.3,1000000015,AMD Athlon 200GE Desktop PCAMD Athlon 200GE Desktop PC
+1000000013,Dekstop,"Model: 10th Gen Desktop PC
+Intel 10th Gen Core i3 10100 Processor
+ASRock H510M-HDV/M.2 10th and 11th Gen Micro ATX Motherboard
+PNY XLR8 8GB DDR4 3200MHz Desktop Gaming RAM
+Team MP33 256GB M.2 PCIe SSD",16,30000,3.8,1000000011,Intel 10th Gen Core i3-10100 Desktop PC
+1000000014,Dekstop,"Model: Athlon 200GE Desktop PC
+AMD Athlon 200GE AM4 Socket Desktop Processor with Radeon Vega 3 Graphics
+MSI A320M-A Pro AMD Micro-ATX Motherboard (C)
+TEAM T-FORCE VULCAN Z 256GB SATA SSD",13,20000,3.9,1000000013,AMD Athlon 200GE Desktop PCAMD Athlon 200GE Desktop PC
+1000000015,Headphone,"Model: W35
+Bluetooth: 5.3
+Battery capacity: 400mah
+Charging about 2 hours",19,2000,4.3,1000000022,Hoco W35 Wireless Headphone
+1000000016,Headphone,"Model: A770BL
+Bluetooth Version: 5.0
+Noise Reduction technology
+Transmission Distance: 10M",15,1500,4.5,1000000014,Awei A770BL Bluetooth Wireless Stereo Headphone
+1000000017,Headphone,"Model: Rockerz 450 Pro
+Driver: 40mm
+Battery life: Up to 70 hrs
+Type-C Charging",17,3123,4.3,1000000014,boAt Rockerz 450 Pro Over-Ear Bluetooth Headphone
+1000000018,Headphone,"Model: ES-770i
+Driver Unit: 50mm
+Sensitivity:>110dB
+Impedance: 20 ohm",14,1500,3.8,1000000014,AWEI ES-770i Over-Ear Bluetooth Gaming Headset
+1000000019,Egg,Country of Origin: Bangladesh ,13,142,4.6,1000000051,Brightfields Egg Brown Regular
+1000000020,Egg,Country of Origin: Bangladesh ,15,180,4.3,1000000051,Purnava Vitamin E Enriched Egg 12pcs
+1000000021,Chicken,Ready made chicken cut for easy preprcessing,17,420,4.8,1000000049,Bengal Meat Whole Chicken-Curry Cut 1KG
+1000000022,Chicken,Country of Origin: Bangladesh ,120,338,4.2,1000000048,Broiler Chicken Skinless (900g to 1kg+/ Whole)
+1000000023,Chicken,Country of Origin: Bangladesh ,45,340,4.3,1000000048,CP Frozen Whole Chicken Skinless 1100g

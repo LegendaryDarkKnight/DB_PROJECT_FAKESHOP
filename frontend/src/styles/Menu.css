@@ -27,4 +27,8 @@
     visibility: visible;
     transform: scaleX(1);
 }
+
+.items{
+    margin-right: 0;
+}
 /* Center align the search bar */

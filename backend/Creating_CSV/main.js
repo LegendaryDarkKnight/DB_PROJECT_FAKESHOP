@@ -10,7 +10,7 @@ const main = async()=>{
         process.exit(1);
     }
 }
-async function run(query, outputFormat = database.options.OUT_FORMAT_OBJECT) {
+async function run(query, outputFormat = database.options.outFormat) {
     const result = await database.execute(query, [], {
         outFormat: outputFormat
     });

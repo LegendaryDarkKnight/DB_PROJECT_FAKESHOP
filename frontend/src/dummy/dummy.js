@@ -1,20 +1,20 @@
 const Dummy = [ 
     {
-        Product_id: 101,
-        Category: "Tech",
-        Description: "Very Good",
+        PRODUCT_ID: 101,
+        CATEGORY: "Tech",
+        DESCRIPTION: "Very Good",
         Image: "../../images/download.jpeg"
     },
     {
-        Product_id: 102,
-        Category: "Tech",
-        Description: "Very Bad",
+        PRODUCT_ID: 102,
+        CATEGORY: "Tech",
+        DESCRIPTION: "Very Bad",
         Image: "../../images/download1.jpeg"
     },
     {
-        Product_id: 103,
-        Category: "Tech",
-        Description: "Mediocre",
+        PRODUCT_ID: 103,
+        CATEGORY: "Tech",
+        DESCRIPTION: "Mediocre",
         Image: "../../images/download2.jpeg"
     }
 ]

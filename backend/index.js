@@ -7,6 +7,7 @@ app.use(express.json());
 app.use(cors());
 const logIn = require('./Database/db-login-api');
 const database = require('./Database/database');
+const getAllProducts = require('./Database/db-products-api');
 
 async function run(query, outputFormat = database.options.outFormat) {
     const result = await database.execute(query, [], {
@@ -15,12 +16,12 @@ async function run(query, outputFormat = database.options.outFormat) {
 
     return result;
 }
-app.post("/process", async (req, res) => {
-    console.log(req.body.email);
-    const name = req.body.email.trim();
-    const data = await run();
-    res.send(data);
-});
+// app.post("/process", async (req, res) => {
+//     console.log(req.body.email);
+//     const name = req.body.email.trim();
+//     const data = await run();
+//     res.send(data);
+// });
 
 
 app.post("/logindata", async (req, res) => {
@@ -46,7 +47,7 @@ app.post("/getUserData", async (req, res) => {
 });
 
 app.get("/getUserData", async (req, res) => {
-    try {
+    try { 
         const id = req.query.id; // Assuming you're passing the id as a query parameter
 
         const query = `SELECT * FROM ALL_USERS WHERE USER_ID = '${id}'`;
@@ -59,6 +60,16 @@ app.get("/getUserData", async (req, res) => {
     }
 });
 
+app.get("/getProducts", async(req,res) =>{
+    try {
+        const data = await getAllProducts();
+        console.log(data);
+        res.send(data);
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).send("Internal Server Error");
+    }
+});
 app.listen(process.env.PORT, async ()=>
 {
     try{
