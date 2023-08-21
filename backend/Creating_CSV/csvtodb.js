@@ -28,15 +28,15 @@ async function insertDataIntoDB(data) {
 async function readCSVAndInsert() {
     const data = [];
 
-    fs.createReadStream(path.join(__dirname, 'product.csv'))
+    fs.createReadStream(path.join(__dirname, 'wallet.csv'))
         .pipe(csvParser({ delimiter: ',' }))
         .on('data', row => {
-            // console.log('CSV Row:', row);
+            console.log('CSV Row:', row);
             // console.log(typeof row.PRODUCT_ID)
             data.push(row);
         })
         .on('end', async () => {
-            await insertDataIntoDB(data);
+            // await insertDataIntoDB(data);
         });
 }
 
