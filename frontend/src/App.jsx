@@ -4,6 +4,7 @@ import Signup from './pages/Signup';
 import Home from './pages/Home';
 import Details from './pages/Details';
 import Products from './pages/Products';
+import Cart from "./pages/Cart";
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { useState } from 'react'
 export const UserContext = React.createContext();
@@ -21,6 +22,7 @@ const App = () => {
             <Route path='/signup' element={<Signup />}></Route>
             <Route path='/home/:userID' element={<Home />}></Route>
             <Route path='/details/:title' element={<Details />}></Route>
+            <Route path='/cart/:userID' element={<Cart/>}></Route>
           </Routes>
         </BrowserRouter>
       </UserContext.Provider>

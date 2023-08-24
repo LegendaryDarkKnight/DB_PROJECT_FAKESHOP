@@ -1,7 +1,6 @@
 import { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../App';
-// import Validation from '../assets/LoginValidation';
 
 const LogIn = () => {
     const [values, setValues] = useState({
@@ -14,12 +13,13 @@ const LogIn = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
             try {
-                const response = await fetch("http://localhost:3000/logindata", {
+                const response = await fetch("http://localhost:3000/login", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({ email: values.email, password: values.password }),
+                    credentials: 'include',
                 });
 
                 if (!response.ok) {
@@ -27,12 +27,11 @@ const LogIn = () => {
                 }
 
                 const data = await response.json();
-                console.table(data);
-                // setUserData(data);
-                setUserid(data.rows[0].USER_ID);
-                {console.log('here '+data.rows[0].USER_ID)}
-                // setResponseMessage(JSON.stringify(data.rows[0][1]) + JSON.stringify(data.rows[0][2]));
-                navigate(`/home/${data.rows[0].USER_ID}`);
+                {data && console.table(data);}
+                setUserData(data);
+                {data && setUserid(data.rows[0].USER_ID);}
+                {console.log('here '+data.rows[0].USER_ID);}
+                navigate(`/`);
 
             } catch (error) {
                 console.error("Error:", error);
@@ -58,7 +57,7 @@ const LogIn = () => {
                                 onChange={handleInput} placeholder='Enter Password' className="form-control rounded-0" />
                         </div>
                         <button type='submit' className="btn btn-success">Log in</button>
-                        <p>You are agreeing to our terms and conditions</p>
+                        <p>Forgot Password</p>
                         <Link to="/signup" className="btn btn-default border w-100 bg-light rounded-0 text-decoration-none">Create Account</Link>
                     </form>
                     {/* {responseMessage && <p>{responseMessage}</p>} */}

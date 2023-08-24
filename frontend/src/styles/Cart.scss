@@ -1,0 +1,128 @@
+/* Add your global styles here */
+
+.cart-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin: 20px;
+}
+
+/* Add your global styles here */
+
+.cart-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 10px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: box-shadow 0.3s ease;
+}
+
+.cart-card:hover {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cart-item-image {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.cart-props-details {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.quantity-controls button {
+  padding: 5px 15px;
+  font-size: 20px;
+  background-color: #f0f0f0;
+  border: none;
+  cursor: pointer;
+}
+
+.quantity-controls button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.quantity {
+  display: inline-block;
+  font-size: 18px;
+  margin: 0 15px;
+}
+
+.card {
+  position: relative;
+  /* Rest of your styles */
+}
+
+.card__btn--remove {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 200ms ease-in;
+  z-index: 1;
+}
+
+.cross-icon {
+  color: var(--clr-gray600);
+  font-size: 1rem;
+  /* Add any other styles you want */
+}
+
+.cart-card {
+  position: relative;
+  /* Other styles ... */
+}
+
+.checkbox-container {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+}
+
+.custom-checkbox {
+  appearance: none;
+  width: 30px;
+  height: 30px;
+  border: 2px solid transparent; /* Set border to transparent */
+  border-radius: 4px;
+  background: white; /* Gradient background */
+  cursor: pointer;
+  position: relative;
+  margin: 0;
+  z-index: 1;
+}
+
+.custom-checkbox:checked {
+  background: linear-gradient(to right, blue, cyan) no-repeat; /* Reversed gradient when checked */
+  border: 2px solid cyan;
+ /* Set border to transparent */
+}
+
+.custom-checkbox:checked::before {
+  content: "\2713";
+  color: white;
+  font-size: 17px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}

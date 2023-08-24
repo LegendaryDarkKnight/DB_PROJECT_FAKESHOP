@@ -1,14 +1,25 @@
 import { Link } from "react-router-dom";
 import '../styles/Menu.css'
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { UserContext } from "../App";
 export default function Menu() {
-    const [logged,changelog] = useState(false);
+    const {userData,setUserData} = useContext(UserContext);
+    const handleLogout = () => {
+        // Perform any additional logout actions here
+        // For example, clearing local storage, sending API requests, etc.
+
+        // Clear the user data context
+        setUserData(null);
+
+        // Redirect to a desired route after logging out
+        history.push("/"); // Redirect to the home page
+    };
     return (
         <>
             <nav className="navbar sticky-top navbar-expand-lg bg-body-tertiary" >
                 <div className="container-fluid">
                     <Link className="navbar-brand" to={`/`}>
-                        FAkeshOP
+                        FakeSHOP
                     </Link>
                     <button
                         className="navbar-toggler"
@@ -22,21 +33,18 @@ export default function Menu() {
                         <span className="navbar-toggler-icon" />
                     </button>
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                        <form className="navbar-nav me-auto mb-2 mb-lg-0" role="search">
-                            <input
-                                className="form-control me-2"
-                                type="search"
-                                placeholder="Search"
-                                aria-label="Search"
-                            />
-                            <button className="btn btn-outline-success" type="submit">
-                                Search
-                            </button>
-                        </form>
-                        <ul className="navbar-nav d-flex">
+                        <div className="navbar-nav me-auto mb-2 mb-lg-0" role="search">
+                            
+                        </div>
+                        <ul className="navbar-nav d-flex ">
                             <li className="nav-item">
                                 <Link className="nav-link" aria-current="page" to={`/`}>
-                                    Home
+                                    Search Products
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" aria-current="page" to={`/`}>
+                                    Top Deals
                                 </Link>
                             </li>
                             <li className="nav-item">
@@ -44,12 +52,12 @@ export default function Menu() {
                                     Shops
                                 </Link>
                             </li>
-                            {!logged && <li className="nav-item">
+                            {!userData && <li className="nav-item">
                                 <Link className="nav-link" to={`/login`} >
                                     Login
                                 </Link>
                             </li>}
-                            {logged &&<li className="nav-item dropdown">
+                            {userData && <li className="nav-item dropdown">
                                 <Link
                                     className="nav-link dropdown-toggle"
                                     to={`/`}
@@ -57,25 +65,30 @@ export default function Menu() {
                                     data-bs-toggle="dropdown"
                                     aria-expanded="false"
                                 >
-                                    Dropdown
+                                    {userData.rows[0].EMAIL_ID}
                                 </Link>
                                  <ul className="dropdown-menu">
                                     <li>
-                                        <Link className="dropdown-item" to={`/`}>
-                                            Action
+                                        <Link className="dropdown-item" to={`/home/${userData.rows[0].USER_ID}`}>
+                                            My Profile
                                         </Link>
                                     </li>
                                     <li>
                                         <Link className="dropdown-item" to={`/`}>
-                                            Another action
+                                            My Orders
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link className="dropdown-item" to={`/cart/${userData.rows[0].USER_ID}`}>
+                                            My Cart
                                         </Link>
                                     </li>
                                     <li>
                                         <hr className="dropdown-divider" />
                                     </li>
                                     <li>
-                                        <Link className="dropdown-item" to={`/`}>
-                                            Something else here
+                                        <Link className="dropdown-item" to={`/`} onClick={handleLogout}>
+                                            Log Out
                                         </Link>
                                     </li>
                                 </ul>

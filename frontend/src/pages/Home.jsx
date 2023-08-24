@@ -1,12 +1,10 @@
-import { useContext, useEffect} from 'react';
+import { useContext, useEffect } from 'react';
 import { useParams } from "react-router-dom";
 import { UserContext } from '../App';
 
 const Home = () => {
-  // Check if userData is available in location state
   const { userData, setUserData, walletStatus, setWalletStatus } = useContext(UserContext)
   const profileImageSource = userData ? "../" + userData.rows[0].IMAGE : "";
-  // After fetching and setting the data
   const {userID}  = useParams();
   useEffect(() => {
     reloadData()
@@ -17,23 +15,20 @@ const Home = () => {
   }, []);
   const reloadData = async () => {
     try {
-      console.log(userID);
+      console.log(document.cookie);
       const response = await fetch(`http://localhost:3000/getUserData?id=${userID}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: 'include',
       });
 
       if (!response.ok) {
         console.error("Network response was not ok");
       }
-
       const data = await response.json();
-      console.log('Here we go');
       setUserData(data);
-      console.table(data);
-
     } catch (error) {
       console.log("Error:", error);
     }
@@ -47,6 +42,7 @@ const Home = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ id: userID }),
+        credentials: 'include',
       });
 
       if (!response.ok) {
@@ -96,8 +92,8 @@ const Home = () => {
                     <div>
                       <strong>Wallet Status:</strong> {walletStatus}
                     </div>
-                    <button className="btn btn-success mt-3" onClick={reloadWallet}>
-                      Reload Wallet
+                    <button className="btn btn-success mt-3" >
+                      Edit Profile
                     </button>
                   </div>
                 </div>

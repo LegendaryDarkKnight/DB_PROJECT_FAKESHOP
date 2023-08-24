@@ -1,5 +1,6 @@
 const database = require('./database')
 
+
 async function logIn(email){
     
     const options = {
@@ -13,4 +14,6 @@ async function logIn(email){
     return ans;
 }
 
-module.exports = logIn;
+module.exports = {
+    logIn
+}
