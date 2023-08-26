@@ -1,0 +1,67 @@
+/* Add this to your CSS file */
+*{
+  font-family: 'Playfair Display', serif;
+}
+/* Add this to your CSS file */
+.body1 {
+  font-family: 'Playfair Display', serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to right, #2980B9, #6DD5FA);
+  color: #333;
+}
+
+/* .input-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+} */
+
+.form-container {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 35%; /* Increase the width */
+  display: flex; /* Display items side by side */
+  flex-direction: column; /* Stack elements vertically within the container */
+  align-items: center; /* Center content horizontally */
+}
+
+/* Style the button */
+.btn-success {
+  background: linear-gradient(to right, #2ecc71, #27ae60);
+  border: none;
+  transition: 0.3s;
+}
+
+.btn-success:hover {
+  background: linear-gradient(to right, #27ae60, #2ecc71);
+}
+
+/* Add more styles as needed */
+
+.input-container {
+    position: relative;
+    margin-bottom: 15px; 
+
+  }
+  
+  .input-container label {
+    position: absolute;
+    top: 0;
+    left: 10px;
+    pointer-events: none;
+    transition: 0.3s ease-out;
+    font-family: 'Playfair Display', serif;
+  }
+  
+  .input-field:focus + label,
+  .input-field:not(:placeholder-shown) + label {
+    transform: translateY(-100%);
+    font-size: 12px;
+    color: #6c757d;
+    font-family: 'Playfair Display', serif;
+  }
+  

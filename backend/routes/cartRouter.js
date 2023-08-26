@@ -1,12 +1,15 @@
 const express = require('express');
 const { insertCart, getCart , updateCart, removeCart, inCart} = require('../Database/db-cart-api');
+const { userAuth } = require('../middlewares/auth');
 
 const cartRouter = express.Router();
 
-cartRouter.post('/insert',async(req,res) =>{
+cartRouter.use(userAuth);
+
+cartRouter.post('/insert', async(req,res) =>{
     try{
-        console.log(req.body);
-        await insertCart(req.body.userID,req.body.productID,req.body.amount,req.body.totalPrice)
+        console.log(req.user);
+        await insertCart(req.user.id,req.body.productID,req.body.amount,req.body.totalPrice)
         res.status(200).send();
     }
     catch(error){
@@ -17,8 +20,8 @@ cartRouter.post('/insert',async(req,res) =>{
 
 cartRouter.post('/update', async(req,res) =>{
     try{
-        console.log(req.body);
-        await updateCart(req.body.userID,req.body.productID,req.body.amount,req.body.totalPrice)
+        console.log(req.user);
+        await updateCart(req.user.id,req.body.productID,req.body.amount,req.body.totalPrice)
         res.status(200).send();
     }
     catch(error){
@@ -29,8 +32,8 @@ cartRouter.post('/update', async(req,res) =>{
 
 cartRouter.post('/remove', async(req,res) =>{
     try{
-        console.log(req.body);
-        await removeCart(req.body.userID,req.body.productID)
+        console.log(req.user);
+        await removeCart(req.user.id,req.body.productID)
         res.status(200).send();
     }
     catch(error){
@@ -41,8 +44,8 @@ cartRouter.post('/remove', async(req,res) =>{
 
 cartRouter.post('/check', async(req,res) =>{
     try{
-        console.log(req.body);
-        const result = await inCart(req.body.userID,req.body.productID)
+        console.log(req.user);
+        const result = await inCart(req.user.id,req.body.productID)
         if(result)
          res.status(200).send({ans: "Yes"});
         else
@@ -54,9 +57,10 @@ cartRouter.post('/check', async(req,res) =>{
     res.status(500).send();
 }) 
 
-cartRouter.post('/',async (req,res)=>{
+cartRouter.post('/', async (req,res)=>{
     try{
-       const ans = await getCart(req.body.userID);
+       const ans = await getCart(req.user.id);
+       console.log('ans'+ans);
        res.send(ans);
     }
     catch(error){
@@ -66,13 +70,13 @@ cartRouter.post('/',async (req,res)=>{
 }) // passed
 cartRouter.get('/',async (req,res)=>{
     try{
-       const ans = await getCart(req.query.userID);
-       console.log(ans);
+       const ans = await getCart(req.user.id);
+       console.log('ans'+ans);
        res.send(ans);
     }
     catch(error){
         console.log(error);
+        res.status(404).send();
     }
-    res.status(404).send();
-})
+}) //passed
 module.exports = cartRouter;

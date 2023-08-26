@@ -14,7 +14,9 @@ const userAuth = (req, res, next) => {
                 next();
             } else {
                 const decodedId = decoded.id;
+                console.log('id '+decodedId);
                 let results = await getUser(decodedId);
+                console.log('user '+results.rows[0]);
                 if (results.length == 0) {
                     console.log('auth: invalid cookie');
                 }
@@ -23,9 +25,7 @@ const userAuth = (req, res, next) => {
                     let time = new Date();
                     req.user = {
                         id: decodedId,
-                        EMAIL: results[0].EMAIL,
-                        NAME: results[0].NAME,
-                        IMAGE: results[0].IMAGE
+                        EMAIL: results.rows[0].EMAIL_ID,
                     }
                 }
                 next();

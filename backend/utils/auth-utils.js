@@ -10,11 +10,11 @@ async function loginUser(res, userId){
     };
     let token = jwt.sign(payload, process.env.APP_SECRET);
     let options = {
-        maxAge: 9000000, 
-        httpOnly: false
+        maxAge: 90000000, 
+        httpOnly: true
     }
     res.cookie('sessionToken', token, options);
-    res.cookie('userID', userId, options); // Set userID cookie
+    // res.cookie('userID', userId, options); // Set userID cookie
     res.header('Access-Control-Allow-Credentials', 'true');
 }
 

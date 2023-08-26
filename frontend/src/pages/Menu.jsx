@@ -1,18 +1,54 @@
 import { Link } from "react-router-dom";
 import '../styles/Menu.css'
-import { useContext, useState } from "react";
+import { useContext, useEffect } from "react";
 import { UserContext } from "../App";
 export default function Menu() {
     const {userData,setUserData} = useContext(UserContext);
-    const handleLogout = () => {
+    const reloadUserData = async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/getUserData`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        console.error("Network response was not ok");
+      }
+      const data = await response.json();
+      setUserData(data);
+    } catch (error) {
+      console.log("Error:", error);
+    }
+
+  }
+    useEffect(() => {
+        reloadUserData();
+      },[])
+    const handleLogout = async () => {
         // Perform any additional logout actions here
         // For example, clearing local storage, sending API requests, etc.
-
+        try {
+            const response = await fetch(`http://localhost:3000/logout`, {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              credentials: 'include',
+            });
+      
+            if (!response.ok) {
+              console.error("Network response was not ok");
+            }
+          } catch (error) {
+            console.log("Error:", error);
+          }
         // Clear the user data context
         setUserData(null);
-
         // Redirect to a desired route after logging out
-        history.push("/"); // Redirect to the home page
+        // Redirect to the home page
     };
     return (
         <>
@@ -54,7 +90,7 @@ export default function Menu() {
                             </li>
                             {!userData && <li className="nav-item">
                                 <Link className="nav-link" to={`/login`} >
-                                    Login
+                                    Login/Register
                                 </Link>
                             </li>}
                             {userData && <li className="nav-item dropdown">
@@ -69,7 +105,7 @@ export default function Menu() {
                                 </Link>
                                  <ul className="dropdown-menu">
                                     <li>
-                                        <Link className="dropdown-item" to={`/home/${userData.rows[0].USER_ID}`}>
+                                        <Link className="dropdown-item" to={`/home`}>
                                             My Profile
                                         </Link>
                                     </li>
@@ -79,7 +115,7 @@ export default function Menu() {
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link className="dropdown-item" to={`/cart/${userData.rows[0].USER_ID}`}>
+                                        <Link className="dropdown-item" to={`/cart`}>
                                             My Cart
                                         </Link>
                                     </li>

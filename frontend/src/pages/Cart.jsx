@@ -66,36 +66,44 @@ CartpropsCard.propTypes = {
 };
 
 const Cart = () => {
-    const { userID } = useParams();
+    // const { userID } = useParams();
     const [cartData, setCartData] = useState([]);
     const [checkedItems, setCheckedItems] = useState([]);
 
     const fetchCartData = async () => {
         try {
-            console.log(userID);
-            const response = await fetch(`http://localhost:3000/cart?userID=${userID}`, {
+            // console.log('fetch' + userID);
+            const response = await fetch(`http://localhost:3000/cart`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
+                credentials: 'include',
             });
+            // console.log('fetch2 ' + userID);
+
+            if(!response.ok){
+                console.log('not ok');
+            }
             const data = await response.json();
+            console.log('dara'+ data);
             setCartData(data.rows);
         } catch (error) {
             console.log('Error fetching cart data:', error);
         }
     };
-    const updateCart = async (productID,amount,totalPrice) => {
+    const updateCart = async (productID, amount, totalPrice) => {
         try {
-            console.log(userID);
+            // console.log(userID);
             const response = await fetch(`http://localhost:3000/cart/update`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({userID: userID, productID:productID, amount: amount, totalPrice: totalPrice})
+                body: JSON.stringify({ productID: productID, amount: amount, totalPrice: totalPrice }),
+                credentials: 'include',
             });
-            if(response.ok)
+            if (response.ok)
                 console.log('updated');
             else
                 console.log('trouble')
@@ -105,15 +113,16 @@ const Cart = () => {
     };
     const removeCart = async (productID) => {
         try {
-            console.log(userID);
+            // console.log(userID);
             const response = await fetch(`http://localhost:3000/cart/remove`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({userID: userID, productID:productID})
+                body: JSON.stringify({ productID: productID }),
+                credentials: 'include',
             });
-            if(response.ok)
+            if (response.ok)
                 console.log('removed');
             else
                 console.log('trouble')
@@ -131,31 +140,57 @@ const Cart = () => {
         console.log(updatedCartData)
         updatedCartData[itemIndex].QUANTITY = newQuantity;
         updatedCartData[itemIndex].TOTAL_PRICE = newQuantity * updatedCartData[itemIndex].PRICE;
-        await updateCart(updatedCartData[itemIndex].PRODUCT_ID,updatedCartData[itemIndex].QUANTITY,updatedCartData[itemIndex].TOTAL_PRICE);
+        await updateCart(updatedCartData[itemIndex].PRODUCT_ID, updatedCartData[itemIndex].QUANTITY, updatedCartData[itemIndex].TOTAL_PRICE);
         setCartData(updatedCartData);
     };
     const handleRemoveCartItem = async (itemIndex) => {
         const updatedCartData = cartData.filter((_, index) => index !== itemIndex);
         console.log(cartData[itemIndex].PRODUCT_ID);
-        console.log(userID);
+        // console.log(userID);
         await removeCart(cartData[itemIndex].PRODUCT_ID);
         setCartData(updatedCartData);
     };
+
     const handleToggleCheckbox = (index) => {
-        const updatedCheckedItems = [...checkedItems];
-        updatedCheckedItems[index] = !updatedCheckedItems[index];
+        const updatedCartData = [...cartData];
+        updatedCartData[index].STATUS = updatedCartData[index].STATUS === 'Picked' ? 'Added' : 'Picked';
+        const updatedCheckedItems = updatedCartData.map(item => item.STATUS === 'Picked');
         setCheckedItems(updatedCheckedItems);
     };
-    const fetchSelectedCartData = () => {
-        const selectedData = cartData.filter((_, index) => checkedItems[index]);
-        // Fetch the data for selected items
-        console.log("Selected Cart Data:", selectedData);
+    const renderSelectedItemsTable = () => {
+        return checkedItems.map((isChecked, index) => {
+            if (isChecked) {
+                const item = cartData[index];
+                return (
+                    <tr key={item.PRODUCT_ID}>
+                        <td>{item.PRODUCT_NAME}</td>
+                        <td>{item.TOTAL_PRICE} Tk</td>
+                    </tr>
+                );
+            }
+            return null;
+        });
     };
+    const handleConfirmOrder = async () => {
+        const selectedItems = cartData.filter((_, index) => checkedItems[index]);
+        console.log("Selected Items:", selectedItems);
+        // Here you can perform actions to confirm the order
+    };
+    const calculateTotalPrice = () => {
+        const total = checkedItems.reduce((acc, isChecked, index) => {
+            if (isChecked) {
+                return acc + cartData[index].TOTAL_PRICE;
+            }
+            return acc;
+        }, 0);
+        return total;
+    };
+
     return (
         <>
             <Menu />
-            <br/>
-            <div style={{textAlign:"center"}}>
+            <br />
+            <div style={{ textAlign: "center" }}>
                 <h3>
                     Your Cart
                 </h3>
@@ -182,15 +217,44 @@ const Cart = () => {
                 ))}
                 {cartData.length === 0 && <div>No data</div>}
             </div>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <div style={{textAlign:"center"}}>
+            <br />
+            <br />
+            <br />
+            <br />
+            <div style={{ textAlign: "center" }}>
                 <h3>
                     Selected Items
                 </h3>
             </div>
+
+            <div className="container mt-5">
+                <table className="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {renderSelectedItemsTable()}
+                    </tbody>
+                </table>
+                <div className="text-center">
+                    <h4 className="mb-4">
+                        Total Price: {calculateTotalPrice()} Tk
+                    </h4>
+                    <button className="btn btn-primary btn-lg" onClick={handleConfirmOrder}>
+                        Confirm Order
+                    </button>
+                    <p className="mt-3 text-danger">
+                        Warning: Leaving the page will reset selected items.
+                    </p>
+                </div>
+            </div>
+
+
+            <br />
+            <br />
         </>
     );
 };

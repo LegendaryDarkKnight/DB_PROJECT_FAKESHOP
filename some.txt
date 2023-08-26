@@ -1,9 +1,190 @@
-console.log(userID);
-      const response = await fetch(`http://localhost:3000/cart?userID=${userID}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-      const data = await response.json();
-      setCartData(data.rows);
+<div className="bg-white p-4 rounded w-50">
+                
+                {message!=' ' && message && < div className="alert alert-danger" role="alert">
+                    {message}
+                </div>}
+                <form className="row g-3" onSubmit={onFormSubmit}>
+                    <div className="form-floating col-md-6">
+                        <input
+                            type="name"
+                            className="form-control"
+                            id="first-name"
+                            placeholder="Somik"
+                            onChange={(e) => {
+                                setFirstName(e.target.value);
+                            }}
+                            required
+                        />
+                        <label htmlFor="first-name" className="form-label">
+                            First Name
+                        </label>
+                    </div>
+                    <div className="form-floating col-md-6">
+                        <input
+                            type="name"
+                            className="form-control"
+                            id="last-name"
+                            placeholder="Dasgupta"
+                            onChange={(e) => {
+                                setLastName(e.target.value);
+                            }}
+                            required
+                        />
+                        <label htmlFor="last-name" className="form-label">
+                            Last Name
+                        </label>
+                    </div>
+                    <div className="form-floating col-md-6">
+                        <input
+                            type="email"
+                            className="form-control"
+                            id="inputEmail4"
+                            placeholder="name@example.com"
+                            onChange={(e) => {
+                                setEmail(e.target.value);
+                            }}
+                            required
+                        />
+                        <label htmlFor="inputEmail4" className="form-label">
+                            Email
+                        </label>
+                    </div>
+                    <div className="form-floating col-md-6">
+                        <input
+                            type="password"
+                            className="form-control"
+                            id="inputPassword4"
+                            placeholder="Password"
+                            onChange={(e) => {
+
+                            }}
+                            required
+                        />
+                        <label htmlFor="inputPassword4" className="form-label">
+                            Password
+                        </label>
+                    </div>
+                    <div className="form-floating col-md-6">
+                        <input
+                            type="password"
+                            className="form-control"
+                            id="inputPass"
+                            placeholder="Password"
+                            onChange={(e) => {
+                                setPassword(e.target.value);
+                            }}
+                            required
+                        />
+                        <label htmlFor="inputPass" className="form-label">
+                            Password
+                        </label>
+                    </div>
+                    <div className="form-floating col-md-6">
+                        <input
+                            type="password"
+                            className="form-control"
+                            id="conPass"
+                            placeholder="Password"
+                            onChange={(e) => {
+                                if (e.target.value == '') {
+                                    setMessage(' ')
+                                }
+                                else if (password == '') {
+                                    setMessage('First set and then Confirm');
+                                }
+                                else if (e.target.value != password)
+                                    setMessage(`Password Don't match`)
+                                else
+                                    setMessage(` `)
+                                // setPassword(e.target.value);
+                            }}
+                            required
+                        />
+                        <label htmlFor="conPass" className="form-label">
+                            Confirm Password
+                        </label>
+                    </div>
+                    <div className="col-12 form-floating">
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="inputAddress"
+                            placeholder="1234 Main St"
+                            onChange={(e) => {
+                                setAddress(e.target.value);
+                            }}
+                            required
+                        />
+                        <label htmlFor="inputAddress" className="form-label">
+                            Address
+                        </label>
+                    </div>
+                    <div className="col-md-6">
+                        <label htmlFor="inputCity" className="form-label">
+                            City
+                        </label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="inputCity"
+                            onChange={(e) => {
+                                setCity(e.target.value);
+                            }}
+                            required
+                        />
+                    </div>
+                    <div className="col-md-4">
+                        <label htmlFor="inputState" className="form-label">
+                            Type
+                        </label>
+                        <select
+                            id="inputState"
+                            className="form-select"
+                            onChange={(e) => {
+                                setType(e.target.value);
+
+                            }}
+                            required
+                        >
+                            <option selected="">Customer</option>
+                            <option>Shop</option>
+                        </select>
+                    </div>
+                    <div className="col-md-2">
+                        <label htmlFor="inputZip" className="form-label">
+                            Zip(Number)
+                        </label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="inputZip"
+                            onChange={(e) => {
+                                setZip(e.target.value);
+                            }}
+                            required
+                        />
+                    </div>
+                    <div className="col-12">
+
+                    </div>
+                    <div className="container text-center">
+                        <div className="row">
+                            <div className="col">
+                                <button type="submit" className="btn btn-lg btn-primary">Sign up</button>
+                            </div>
+                            <div className="col mt-2">
+                                <strong>Already have an account?</strong>
+                                <button
+                                    type="button"
+                                    style={{ textDecoration: "none" }}
+                                    onClick={() => { navigate('/login') }}
+                                    className="btn  btn-link"
+                                >
+                                    Click
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>

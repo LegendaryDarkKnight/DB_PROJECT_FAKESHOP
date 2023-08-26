@@ -8,8 +8,9 @@ import { useEffect, useState, useContext } from "react";
 import { UserContext } from '../App';
 
 function Card(props) {
-  const { userData } = useContext(UserContext);
+  const { userData} = useContext(UserContext);
   const navigate = useNavigate();
+  
   const addInCart = async(data) =>{
     console.log("add");
     try {
@@ -37,7 +38,7 @@ function Card(props) {
       alert("Please log in to add items to your cart.");
       navigate('/login');
     } else {
-      const data = {userID: userData.rows[0].USER_ID,productID: props.productID, amount:1, totalPrice: props.price}
+      const data = {productID: props.productID, amount:1, totalPrice: props.price}
       console.log(data);
       let ans;
       try {
@@ -57,6 +58,7 @@ function Card(props) {
           console.log(ans);
           if(ans.ans == 'No'){
             await addInCart(data);
+            alert('Added to Cart');
           }
           else{
             alert('Already Added');
@@ -95,8 +97,10 @@ Card.propTypes = {
 };
 
 export default function Products() {
+  
   const [product, setAllproduct] = useState(null);
-
+  
+  
   useEffect(() => {
     reloadData();
   }, []);
@@ -136,7 +140,7 @@ export default function Products() {
               key={contents.PRODUCT_ID}
               productID={contents.PRODUCT_ID}
               title={contents.PRODUCT_NAME}
-              image={'../../images/download1.jpeg'}
+              image={'../../images/download2.jpeg'}
               price={contents.PRICE}
               stock={contents.STOCK}
             />
