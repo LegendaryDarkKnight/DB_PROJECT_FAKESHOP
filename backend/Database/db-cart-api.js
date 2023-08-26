@@ -82,17 +82,37 @@ async function inCart(userID,productID){
     `SELECT STATUS
      FROM CART
      WHERE PRODUCT_ID = :productID 
-     AND CUSTOMER_ID = :userID`
+     AND CUSTOMER_ID = :userID`;
+     
     const result = await database.execute(query,binds,options);
     if(result.rows.length)
         return true;
     else
         return false;
 }
+
+async function updateCartStatus(userID,productID, status){
+    const options = {
+        outFormat: database.options.outFormat
+    };
+    const binds = {
+        userID: userID,
+        productID: productID,
+        status: status
+    }
+    const query =
+    `UPDATE CART
+    SET STATUS = :status
+    WHERE CUSTOMER_ID = :userID
+    AND PRODUCT_ID = :productID`;
+
+    await database.execute(query,binds,options);
+}
 module.exports = {
     getCart,
     insertCart,
     updateCart,
     removeCart,
-    inCart
+    inCart,
+    updateCartStatus
 };

@@ -1,5 +1,5 @@
 const express = require('express');
-const { insertCart, getCart , updateCart, removeCart, inCart} = require('../Database/db-cart-api');
+const { insertCart, getCart , updateCart, removeCart, inCart, updateCartStatus} = require('../Database/db-cart-api');
 const { userAuth } = require('../middlewares/auth');
 
 const cartRouter = express.Router();
@@ -79,4 +79,16 @@ cartRouter.get('/',async (req,res)=>{
         res.status(404).send();
     }
 }) //passed
+
+cartRouter.post('/updateStatus', async(req,res)=>{
+    try{
+        console.log('herr');
+        await updateCartStatus(req.user.id, req.body.productID, req.body.status);
+        console.log('updated');
+        res.status(200).send();
+    }
+    catch(err){
+        console.log(err);
+    }
+})
 module.exports = cartRouter;

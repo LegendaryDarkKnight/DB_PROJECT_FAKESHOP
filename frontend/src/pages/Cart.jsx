@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Menu from './Menu'; // Make sure to adjust the import path
 import '../styles/Cart.scss'
@@ -66,13 +65,11 @@ CartpropsCard.propTypes = {
 };
 
 const Cart = () => {
-    // const { userID } = useParams();
     const [cartData, setCartData] = useState([]);
     const [checkedItems, setCheckedItems] = useState([]);
 
     const fetchCartData = async () => {
         try {
-            // console.log('fetch' + userID);
             const response = await fetch(`http://localhost:3000/cart`, {
                 method: "GET",
                 headers: {
@@ -80,7 +77,6 @@ const Cart = () => {
                 },
                 credentials: 'include',
             });
-            // console.log('fetch2 ' + userID);
 
             if(!response.ok){
                 console.log('not ok');
@@ -93,9 +89,8 @@ const Cart = () => {
         }
     };
     const updateCart = async (productID, amount, totalPrice) => {
-        try {
-            // console.log(userID);
-            const response = await fetch(`http://localhost:3000/cart/update`, {
+        try { 
+           const response = await fetch(`http://localhost:3000/cart/update`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -113,7 +108,6 @@ const Cart = () => {
     };
     const removeCart = async (productID) => {
         try {
-            // console.log(userID);
             const response = await fetch(`http://localhost:3000/cart/remove`, {
                 method: "POST",
                 headers: {
@@ -146,7 +140,6 @@ const Cart = () => {
     const handleRemoveCartItem = async (itemIndex) => {
         const updatedCartData = cartData.filter((_, index) => index !== itemIndex);
         console.log(cartData[itemIndex].PRODUCT_ID);
-        // console.log(userID);
         await removeCart(cartData[itemIndex].PRODUCT_ID);
         setCartData(updatedCartData);
     };
@@ -174,7 +167,6 @@ const Cart = () => {
     const handleConfirmOrder = async () => {
         const selectedItems = cartData.filter((_, index) => checkedItems[index]);
         console.log("Selected Items:", selectedItems);
-        // Here you can perform actions to confirm the order
     };
     const calculateTotalPrice = () => {
         const total = checkedItems.reduce((acc, isChecked, index) => {
@@ -251,8 +243,6 @@ const Cart = () => {
                     </p>
                 </div>
             </div>
-
-
             <br />
             <br />
         </>

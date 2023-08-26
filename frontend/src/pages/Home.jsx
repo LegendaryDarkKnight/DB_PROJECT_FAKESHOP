@@ -1,12 +1,11 @@
 import { useContext, useEffect } from 'react';
-// import { useParams } from "react-router-dom";
 import { UserContext } from '../App';
 import Menu from './Menu';
 
 const Home = () => {
   const { userData, setUserData, walletStatus, setWalletStatus } = useContext(UserContext)
   const profileImageSource = userData ? "../" + userData.rows[0].IMAGE : "";
-  // const { userID } = useParams();
+
   useEffect(() => {
     reloadData()
       .then(() => reloadWallet())
@@ -41,7 +40,6 @@ const Home = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        // body: JSON.stringify({ id: userID }),
         credentials: 'include',
       });
 

@@ -7,7 +7,6 @@ const LogIn = () => {
         email: '',
         password: ''
     });
-    const [userID,setUserid] = useState(0);
     const navigate = useNavigate();
     const { setUserData} = useContext(UserContext);
     const handleSubmit = async (event) => {
@@ -29,7 +28,6 @@ const LogIn = () => {
                 const data = await response.json();
                 {data && console.table(data);}
                 setUserData(data);
-                {data && setUserid(data.rows[0].USER_ID);}
                 {console.log('here '+data.rows[0].USER_ID);}
                 navigate(`/`);
 

@@ -26,9 +26,6 @@ function Card(props) {
         if (!response.ok) {
           console.error("Network response was not ok");
         }
-
-        // const data = await response.json();
-
       } catch (error) {
         console.error("Error:", error);
       }
