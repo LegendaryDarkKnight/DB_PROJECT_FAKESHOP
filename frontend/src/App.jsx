@@ -5,9 +5,10 @@ import Home from './pages/Home';
 import Details from './pages/Details';
 import Products from './pages/Products';
 import Cart from "./pages/Cart";
+// import Test from "./pages/Test";
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { useState } from 'react'
-import Test from './pages/Test';
+
 export const UserContext = React.createContext();
 
 const App = () => {
@@ -22,9 +23,9 @@ const App = () => {
             <Route path='/login' element={<LogIn />}></Route>
             <Route path='/signup' element={<Signup />}></Route>
             <Route path='/home/' element={<Home />}></Route>
-            <Route path='/details/:title' element={<Details />}></Route>
+            <Route path='/details/:productID' element={<Details />}></Route>
             <Route path='/cart/' element={<Cart/>}></Route>
-            <Route path='/test/' element={<Test/>}></Route>
+            {/* <Route path='/test/' element={<Test/>}></Route> */}
           </Routes>
         </BrowserRouter>
       </UserContext.Provider>

@@ -79,7 +79,7 @@ function Card(props) {
         <button className="card__btn card__btn--add-to-cart" onClick={handleAddToCart}>
           <FiShoppingCart /> Add to Cart {/* Icon and button text */}
         </button>
-        <Link to={`/details/${props.title}`} className="card__btn card__btn--view-details">View Details</Link>
+        <Link to={`/details/${props.productID}`} className="card__btn card__btn--view-details">View Details</Link>
       </div>
     </div>
   );
@@ -132,12 +132,12 @@ export default function Products() {
       <br />
       <div className="wrapper">
         {product &&
-          product.map((contents) => (
+          product.map((contents,index) => (
             <Card
-              key={contents.PRODUCT_ID}
+              key={index}
               productID={contents.PRODUCT_ID}
               title={contents.PRODUCT_NAME}
-              image={'../../images/download2.jpeg'}
+              image={'../../productImage/'+contents.IMAGE}
               price={contents.PRICE}
               stock={contents.STOCK}
             />

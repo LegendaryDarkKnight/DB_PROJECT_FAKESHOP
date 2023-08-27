@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 
-const { logIn } = require('../Database/db-login-api');
 const { getUser } = require('../Database/db-profile-api');
 
 const userAuth = (req, res, next) => {

@@ -101,7 +101,7 @@
   appearance: none;
   width: 30px;
   height: 30px;
-  border: 2px solid transparent; /* Set border to transparent */
+  border: 2px dashed  black; /* Set border to transparent */
   border-radius: 4px;
   background: white; /* Gradient background */
   cursor: pointer;
@@ -111,15 +111,15 @@
 }
 
 .custom-checkbox:checked {
-  background: linear-gradient(to right, blue, cyan) no-repeat; /* Reversed gradient when checked */
-  border: 2px solid cyan;
+  background: linear-gradient(to right, blue, rgb(0, 72, 255)) no-repeat; /* Reversed gradient when checked */
+  // border: 2px solid cyan;
  /* Set border to transparent */
 }
 
 .custom-checkbox:checked::before {
   content: "\2713";
   color: white;
-  font-size: 17px;
+  font-size: 21px;
   position: absolute;
   top: 50%;
   left: 50%;

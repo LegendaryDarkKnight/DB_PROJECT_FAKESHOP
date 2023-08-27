@@ -12,7 +12,7 @@ async function getCart(id){
     const ans = await database.execute(
         `SELECT p.PRODUCT_ID PRODUCT_ID,p.PRODUCT_NAME PRODUCT_NAME,
         p.PRICE PRICE, c.AMOUNT QUANTITY, p.STOCK STOCK,
-        c.TOTAL_PRICE TOTAL_PRICE, c.STATUS STATUS
+        c.TOTAL_PRICE TOTAL_PRICE, c.STATUS STATUS, p.IMAGE IMAGE
         FROM CART c JOIN PRODUCT p
         ON c.PRODUCT_ID = p.PRODUCT_ID
         WHERE CUSTOMER_ID = :id`, 

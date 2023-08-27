@@ -14,4 +14,21 @@ async function getAllProducts(){
     return ans;
 }
 
-module.exports = getAllProducts;
+async function getSingleProduct(productID){
+    const options = {
+        outFormat: database.options.outFormat
+    };
+    const binds = {
+        productID: productID
+    };
+    const query = `SELECT *
+                   FROM PRODUCT
+                   WHERE PRODUCT_ID = :productID`;
+    const ans = await database.execute(query, binds, options);
+    return ans;
+}
+
+module.exports = {
+    getAllProducts,
+    getSingleProduct
+};

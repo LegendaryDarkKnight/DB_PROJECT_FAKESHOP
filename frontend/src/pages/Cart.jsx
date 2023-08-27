@@ -193,7 +193,7 @@ const Cart = () => {
                 {cartData.map((contents, index) => (
                     <CartpropsCard
                         key={index}
-                        image={'../../images/download1.jpeg'}
+                        image={'../../productImage/'+contents.IMAGE}
                         name={contents.PRODUCT_NAME}
                         price={contents.TOTAL_PRICE}
                         singlePrice={contents.PRICE}

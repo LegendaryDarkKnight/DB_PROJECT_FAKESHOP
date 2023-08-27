@@ -14,7 +14,6 @@ async function loginUser(res, userId){
         httpOnly: true
     }
     res.cookie('sessionToken', token, options);
-    // res.cookie('userID', userId, options); // Set userID cookie
     res.header('Access-Control-Allow-Credentials', 'true');
 }
 
