@@ -32,16 +32,13 @@ publicRouter.post('/login', async (req, res) => {
     }
     res.status(401).send();
 });
-publicRouter.get('/logout', (req, res) => {
+
+publicRouter.get('/logout',userAuth, (req, res) => {
+    console.log('cleared');
     res.clearCookie('sessionToken');
     res.json({ message: 'Logout successful' });
 });
-// publicRouter.post('/logindata', async (req, res) => {
-//     console.log(req.body.email);
-//     const name = req.body.email.trim();
-//     const data = await logIn(name);
-//     res.send(data);
-// }); //passed
+
 
 publicRouter.post("/getWalletStatus", userAuth, async (req, res) => {
     try {
@@ -53,16 +50,7 @@ publicRouter.post("/getWalletStatus", userAuth, async (req, res) => {
     }
 });//passed
 
-// publicRouter.post("/getUserData", async (req, res) => {
-//     try {
-//         const id = req.body.id; // Assuming you're passing the id as a query parameter
-//         const data = await getUser(id);
-//         res.send(data);
-//     } catch (error) {
-//         console.error("Error:", error);
-//         res.status(500).send("Internal Server Error");
-//     }
-// });//passed
+
 
 publicRouter.get("/getUserData", userAuth, async (req, res) => {
     try {
@@ -73,6 +61,7 @@ publicRouter.get("/getUserData", userAuth, async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });//passed
+
 
 publicRouter.get("/getProducts", async (req, res) => {
     try {

@@ -10,7 +10,7 @@ async function getAllProducts(){
                    FROM PRODUCT p JOIN SHOP s
                    ON p.SHOP_ID = s.SHOP_ID
                    `;
-    const ans = await database.execute(`SELECT * FROM PRODUCT`, binds, options);
+    const ans = await database.execute(`SELECT * FROM PRODUCT WHERE STOCK>0`, binds, options);
     return ans;
 }
 
@@ -23,7 +23,8 @@ async function getSingleProduct(productID){
     };
     const query = `SELECT *
                    FROM PRODUCT
-                   WHERE PRODUCT_ID = :productID`;
+                   WHERE PRODUCT_ID = :productID
+                   AND STOCK>0`;
     const ans = await database.execute(query, binds, options);
     return ans;
 }

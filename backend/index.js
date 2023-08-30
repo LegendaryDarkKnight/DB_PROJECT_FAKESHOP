@@ -6,6 +6,7 @@ const app = express();
 const database = require('./Database/database');
 const publicRouter = require('./routes/publicRouter');
 const cartRouter = require('./routes/cartRouter');
+const shopRouter = require('./routes/shopRouter');
 
 app.use(cookieParser());
 app.use(express.json());
@@ -13,10 +14,14 @@ app.use(cors({
     origin: 'http://localhost:5173',
     credentials: true,
 }));
+
 app.use('/',publicRouter);
 app.use('/cart',cartRouter);
+app.use('/shop', shopRouter);
+
 app.listen(process.env.PORT, async ()=>
 {
+    console.log(__dirname);
     try{
         await database.startup();
     } catch(err) {
@@ -24,6 +29,7 @@ app.listen(process.env.PORT, async ()=>
         process.exit(1);
     }
 });
+
 
 process
     .once('SIGTERM', database.shutdown)

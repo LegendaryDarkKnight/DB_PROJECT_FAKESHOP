@@ -6,6 +6,7 @@ const userAuth = (req, res, next) => {
     req.user = null;
     if (req.cookies.sessionToken) {
         let token = req.cookies.sessionToken;
+        console.log('Here '+token);
 
         jwt.verify(token, process.env.APP_SECRET, async (err, decoded) => {
             if (err) {
@@ -25,6 +26,7 @@ const userAuth = (req, res, next) => {
                     req.user = {
                         id: decodedId,
                         EMAIL: results.rows[0].EMAIL_ID,
+                        TYPE: results.rows[0].USER_TYPE,
                     }
                 }
                 next();

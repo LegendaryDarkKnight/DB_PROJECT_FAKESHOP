@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Signup.css'
+import Validate from '../../utils/validity';
+
 
 const Signup = () => {
     const [firstName, setFirstName] = useState('');
@@ -8,16 +10,20 @@ const Signup = () => {
     const [email, setEmail] = useState('');
     const [contact , setContact] = useState('');
     const [password, setPassword] = useState('');
-    const [address, setAddress] = useState('');
-    const [type, setType] = useState('Customer');
-    const [city, setCity] = useState('Customer');
-    const [zip, setZip] = useState('Customer');
+    const [password2,setPassword2] = useState('');
+    const [address, setAddress] = useState({
+        apartment: '',
+        building: '',
+        street: '',
+        area: ''
+    });
+    const [type, setType] = useState('CUSTOMER');
+    const [city, setCity] = useState('');
+    const [zip, setZip] = useState('');
     const [message, setMessage] = useState('');
-    const onFormSubmit = async() => {
+
+    const onFormSubmit = async(event) => {
         event.preventDefault();
-        console.log(firstName + ' ' + lastName + ' ' + email + ' '+ contact + ' ' + password + ' ' + address + ' ' + city + ' ' + type + ' ' + zip);
-        const splitted = address.split(',');
-        console.log(splitted);
         const data = {
             firstName: firstName,
             lastName: lastName,
@@ -25,14 +31,41 @@ const Signup = () => {
             contact: contact,
             type: type,
             password: password,
-            apartment: splitted[0],
-            building: splitted[1],
-            street: splitted[2],
-            area: splitted[3],
+            apartment: address.apartment,
+            building: address.building,
+            street: address.street,
+            area: address.area,
             postcode: zip,
             city: city
         };
-        console.log(data);
+        await console.table(data);
+        console.log(email);
+        let x;
+        x = await Validate.ValidateEmail(email);
+        console.log(x);
+        if(!x){
+            await alert('invalid email');
+        }
+        x = await Validate.ValidatePassword(password);
+        if(x!=''){
+            await alert(x);
+        }
+        if(password != password2)
+        {
+            setMessage('Password Dont Match');
+            return;
+        }
+        if(contact.length!=11)
+        {
+            await alert('Contact onnly of 11 digits');
+            return;
+        }
+
+        if(isNaN(parseInt(zip))){
+            await alert('Zip only Integers');
+            return;
+        }
+
         try {
             const response = await fetch("http://localhost:3000/signup", {
                 method: "POST",
@@ -50,6 +83,8 @@ const Signup = () => {
         } catch (error) {
             console.error("Error:", error);
         }
+        await alert('Succesfully Signed Up. Now log in');
+        navigate('/login');        
     }
     const navigate = useNavigate();
     return (
@@ -58,7 +93,7 @@ const Signup = () => {
                     <h1 style={{color:"#9B2335"}}>Sign Up</h1>
                     <br></br>
                     <h6 style={{color:"#1B2445"}}>Back to Main Page</h6>
-                    <Link  className="nav-link" aria-current="page" to={`/`}>Click Here</Link>
+                    <Link  className="nav-link" aria-current="page" to={`/`}><strong>Click Here</strong></Link>
             </div>
             <div className="bg-white p-4 rounded w-50 col-md-10">
 
@@ -148,6 +183,7 @@ const Signup = () => {
                             id="conPass"
                             placeholder="Password"
                             onChange={(e) => {
+                                setPassword2(e.target.value);
                                 if (e.target.value == '') {
                                     setMessage(' ')
                                 }
@@ -165,41 +201,103 @@ const Signup = () => {
                             Confirm Password
                         </label>
                     </div>
-                    <div className="col-12 form-floating">
+                    {/*  */}
+                    <div className="col-3 form-floating">
                         <input
                             type="text"
                             className="form-control"
-                            id="inputAddress"
-                            placeholder="1234 Main St"
-                            onChange={(e) => {
-                                setAddress(e.target.value);
+                            id="inputApartment"
+                            placeholder="123"
+                            name = "apartment"
+                            onChange={(event) => {
+                                setAddress(prev => ({ ...prev, [event.target.name]: event.target.value }));
                             }}
                             required
                         />
-                        <label htmlFor="inputAddress" className="form-label">
-                            Address(apartment,building,street,area)
+                        <label htmlFor="inputApartment" className="form-label">
+                            Apartment Number
                         </label>
                     </div>
-                    <div className="col-md-6">
-                        <label htmlFor="inputCity" className="form-label">
-                            City
-                        </label>
+                    <div className="col-3 form-floating">
                         <input
                             type="text"
                             className="form-control"
+                            id="inputBuilding"
+                            placeholder="123"
+                            name = "building"
+                            onChange={(event) => {
+                                setAddress(prev => ({ ...prev, [event.target.name]: event.target.value }));
+                            }}
+                            required
+                        />
+                        <label htmlFor="inputBuilding" className="form-label">
+                            Building Number
+                        </label>
+                    </div>
+                    <div className="col-3 form-floating">
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="inputStreet"
+                            placeholder="123"
+                            name = "street"
+                            onChange={(event) => {
+                                setAddress(prev => ({ ...prev, [event.target.name]: event.target.value }));
+                            }}
+                            required
+                        />
+                        <label htmlFor="inputStreet" className="form-label">
+                            Street
+                        </label>
+                    </div>
+                    <div className="col-3 form-floating">
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="inputArea"
+                            placeholder="123"
+                            name = "area"
+                            onChange={(event) => {
+                                setAddress(prev => ({ ...prev, [event.target.name]: event.target.value }));
+                            }}
+                            required
+                        />
+                        <label htmlFor="inputArea" className="form-label">
+                            Area
+                        </label>
+                    </div>
+                    {/*  */}
+                    <div className="col-md-5">
+                        <label htmlFor="inputCity" className="form-label">
+                            City
+                        </label>
+                        <select
                             id="inputCity"
+                            className="form-select"
                             onChange={(e) => {
                                 setCity(e.target.value);
                             }}
                             required
-                        />
+                        >
+                            <option selected="DHAKA">DHAKA</option>
+                            <option>CHATTOGRAM</option>
+                            <option>RAJSHAHI</option>
+                            <option>KHULNA</option>
+                            <option>SYLHET</option>
+                            <option>CUMILLA</option>
+                            <option>NOAKHALI</option>
+                            <option>JESSORE</option>
+                            <option>RANGPUR</option>
+                            <option>BARISHAL</option>
+                            <option>MYMENSINGH</option>
+                        </select>
                     </div>
-                    <div className="col-md-4">
-                        <label htmlFor="inputState" className="form-label">
+                    <div className="col-md-5">
+                        <label htmlFor="inputType" className="form-label">
                             Type
                         </label>
                         <select
-                            id="inputState"
+                            id="inputType"
                             className="form-select"
                             onChange={(e) => {
                                 setType(e.target.value);

@@ -140,11 +140,12 @@ const Cart = () => {
     const handleRemoveCartItem = async (itemIndex) => {
         const updatedCartData = cartData.filter((_, index) => index !== itemIndex);
         console.log(cartData[itemIndex].PRODUCT_ID);
+        await handleToggleCheckbox(itemIndex);
         await removeCart(cartData[itemIndex].PRODUCT_ID);
         setCartData(updatedCartData);
     };
 
-    const handleToggleCheckbox = (index) => {
+    const handleToggleCheckbox = async (index) => {
         const updatedCartData = [...cartData];
         updatedCartData[index].STATUS = updatedCartData[index].STATUS === 'Picked' ? 'Added' : 'Picked';
         const updatedCheckedItems = updatedCartData.map(item => item.STATUS === 'Picked');

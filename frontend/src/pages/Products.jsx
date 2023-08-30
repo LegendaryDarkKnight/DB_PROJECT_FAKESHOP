@@ -34,7 +34,12 @@ function Card(props) {
     if (!userData) {
       alert("Please log in to add items to your cart.");
       navigate('/login');
-    } else {
+    }
+    else if(userData.rows[0].USER_TYPE != 'CUSTOMER') {
+      alert('You cannot buy products as shop');
+      return;
+    } 
+    else {
       const data = {productID: props.productID, amount:1, totalPrice: props.price}
       console.log(data);
       let ans;
@@ -100,6 +105,7 @@ export default function Products() {
   
   useEffect(() => {
     reloadData();
+   
   }, []);
 
   const reloadData = async () => {
@@ -109,6 +115,7 @@ export default function Products() {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: 'include',
       });
 
       if (!response.ok) {

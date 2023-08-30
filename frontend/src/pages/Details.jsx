@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import '../styles/Details.css'
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Menu from './Menu'
 import { FiShoppingCart } from "react-icons/fi";
+import { UserContext } from "../App";
 
 const Rating = ({ value, onClick }) => {
     const maxStars = 5;
@@ -60,10 +61,13 @@ const ReviewForm = ({ onSubmit }) => {
     );
 };
 
+
 const ProductDetailsPage = () => {
     const { productID } = useParams();
-    console.log(productID);
     const [productData, setProductData] = useState(null);
+    const { userData } = useContext(UserContext);
+    console.log(productID);
+    const navigate = useNavigate();
     const ReloadData = async () => {
         try {
             const response = await fetch("http://localhost:3000/getSingleProduct", {
@@ -87,15 +91,79 @@ const ProductDetailsPage = () => {
             console.error("Error:", error);
         }
     }
+    useEffect(() => {
+        ReloadData();
+    }, []);
+    const addInCart = async (data) => {
+        console.log("add");
+        try {
+            const response = await fetch("http://localhost:3000/cart/insert", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+                credentials: 'include',
+            });
+
+            if (!response.ok) {
+                console.error("Network response was not ok");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+    const handleAddToCart = async () => {
+        if (userData == null) {
+            alert("Please log in to add items to your cart.");
+            navigate('/login');
+        }
+        else if (userData.rows[0].USER_TYPE != 'CUSTOMER') {
+            alert('You cannot buy products as shop');
+            return;
+        }
+        else {
+            const data = { productID: productID, amount: 1, totalPrice: productData.rows[0].PRICE }
+            console.log(data);
+            let ans;
+            try {
+                const response = await fetch("http://localhost:3000/cart/check", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                    credentials: 'include',
+                });
+
+                if (!response.ok) {
+                    console.error("Network response was not ok");
+                }
+                ans = await response.json();
+                console.log(ans);
+                if (ans.ans == 'No') {
+                    await addInCart(data);
+                    alert('Added to Cart');
+                }
+                else {
+                    alert('Already Added');
+                }
+
+            } catch (error) {
+                console.error("Error:", error);
+            }
+
+        }
+    };
+
+
     const product = {
         name: 'Sample Product',
         description: productID,
         price: '$99.99',
         imageUrl: 'sample_image.jpg', // Replace with actual image URL
     };
-    useEffect(() => {
-        ReloadData();
-    }, []);
+
 
     const [reviews, setReviews] = useState([]);
 
@@ -116,7 +184,7 @@ const ProductDetailsPage = () => {
                         <p>{productData.rows[0].DESCRIPTION}</p>
                         <h4>Price: {productData.rows[0].PRICE}</h4>
                         <Rating value={productData.rows[0].RATING} />
-                        <button className="btn btn-primary mx-5" style={{ backgroundColor: 'orange', border: 'none' }}><FiShoppingCart /> Add to Cart</button>
+                        <button className="btn btn-primary mx-5" style={{ backgroundColor: 'orange', border: 'none' }} onClick={handleAddToCart}><FiShoppingCart /> Add to Cart</button>
                     </div>
                 </div>
                 <hr />
