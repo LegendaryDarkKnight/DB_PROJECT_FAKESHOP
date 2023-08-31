@@ -3,12 +3,22 @@ const express = require('express');
 const publicRouter = express.Router();
 
 const { logIn, signUp } = require('../Database/db-login-api');
-const {getAllProducts, getSingleProduct} = require('../Database/db-products-api');
+const {getAllProducts, getSingleProduct, getAllCategory} = require('../Database/db-products-api');
 const { getWallet, getUser } = require('../Database/db-profile-api');
 const { loginUser } = require('../utils/auth-utils');
 const { userAuth } = require('../middlewares/auth');
 const { hashPass, compareHash } = require('../utils/hash-utils');
 
+publicRouter.post('/signup', async(req,res)=>{
+    try {
+        console.log(req.body);
+        await signUp(req.body);
+        res.status(200).send();
+    } catch (error) {
+        console.log(error)
+    }
+    res.status(400).send();
+});
 
 publicRouter.post('/login', async (req, res) => {
     try {
@@ -83,14 +93,16 @@ publicRouter.post("/getSingleProduct", async (req, res) => {
     }
 });
 
-publicRouter.post('/signup', async(req,res)=>{
-    try {
-        console.log(req.body);
-        await signUp(req.body);
-        res.status(200).send();
-    } catch (error) {
-        console.log(error)
+publicRouter.get("/getCategory", async(req,res)=>{
+    try{
+
+        const data = await getAllCategory();
+        console.log(data);
+        res.send(data);
     }
-    res.status(400).send();
+    catch (error) {
+        console.error("Error:", error);
+        res.status(500).send("Internal Server Error");
+    }
 })
 module.exports = publicRouter;

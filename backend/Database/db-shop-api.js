@@ -12,14 +12,15 @@ async function addProduct(pack, shopID){
         rating: 0,
         shopID: shopID,
         productName: pack.productName,
-        image: pack.image
+        image: pack.image,
+        brand: pack.brand
     };
     const query = `INSERT INTO PRODUCT
                    (PRODUCT_ID,CATEGORY,DESCRIPTION,
-                    STOCK,PRICE,RATING
-                    SHOP_ID,PRODUCT_NAME,IMAGE)
+                    STOCK,PRICE,RATING,
+                    SHOP_ID,PRODUCT_NAME,IMAGE,BRAND)
                    VALUES(PRODUCT_SEQUENCE.NEXTVAL,:category, :description, 
-                    :stock, :price, :rating, :shopID, :productName, :image)`;
+                    :stock, :price, :rating, :shopID, :productName, :image, :brand)`;
     
     await database.execute(query,binds,options);
 }

@@ -290,18 +290,20 @@ const Cart = () => {
                 </div>
             </div>
             <Modal open={isOpen} onClose={() => setIsOpen(false)}>
-                <div className="container mt-5">
-                    <table className="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Item Name</th>
-                                <th>Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {renderSelectedItemsTable()}
-                        </tbody>
-                    </table>
+                <div className="container mt-5" style={{ maxHeight: "350px", overflowY: "scroll" }}>
+                    <div style={{ maxHeight: "100%" }}>
+                        <table className="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Item Name</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {renderSelectedItemsTable()}
+                            </tbody>
+                        </table>
+                    </div>
                     <div className="text-center">
                         <h4 className="mb-4">
                             Total Price: {calculateTotalPrice()} Tk
@@ -311,6 +313,9 @@ const Cart = () => {
                         </button>
                     </div>
                 </div>
+
+
+
             </Modal>
             <br />
             <br />

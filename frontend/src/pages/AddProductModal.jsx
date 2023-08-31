@@ -1,12 +1,53 @@
-import React from 'react';
+import React, { useState } from 'react';
 
+function customOption(props){
+    return(
+        <>
+            <option value = {props.CATEGORY}>{props.CATEGORY}</option>
+        </>
+    );
+}
 const AddProductModal = ({ onClose, productFormData, onProductFormChange, onImageUpload, onSubmit }) => {
+    const [categories, setCategories] = useState([]);
+
+    React.useEffect(() => {
+        let isCurrent = true;
+
+        fetch(`http://localhost:3000/getCategory`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: 'include',
+        }).then(res => res.json())
+            .then((categories) => {
+                if (isCurrent) {
+                    setCategories(categories.rows);
+                }
+            })
+            .catch((error) => {
+                // Handle any errors that occur during the fetch request
+                console.error('Error fetching user data:', error);
+            })
+            .finally(() => {
+                // console.log(categories);
+                isCurrent = false; // Make sure to set isCurrent to false in the finally block
+            });
+
+        return () => {
+            isCurrent = false; // Set isCurrent to false when the effect cleanup is performed
+        };
+        // reloadUserData();
+        // console.log(userData.rows[0].USER_TYPE)
+    }, [])
+
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log('here');
         onSubmit(productFormData);
-        onClose();
+        // onClose();
     };
+
     return (
         <div className="modal fade show" tabIndex="-1" role="dialog" style={{ display: 'block' }}>
             <div className="modal-dialog modal-dialog-centered" role="document">
@@ -26,10 +67,13 @@ const AddProductModal = ({ onClose, productFormData, onProductFormChange, onImag
                                     id="category"
                                     value={productFormData.category}
                                     onChange={onProductFormChange}
-                                >
-                                    <option value="">Select a category</option>
+                                    required>
+                                    {categories.map((contents, index) => (
+                                        <option key={index} value = {contents.CATEGORY}>{contents.CATEGORY}</option>
+                                    ))}
+                                    {/* <option value="">Select a category</option>
                                     <option value="electronics">Electronics</option>
-                                    <option value="clothing">Clothing</option>
+                                    <option value="clothing">Clothing</option> */}
                                     {/* Add more options */}
                                 </select>
                             </div>
@@ -41,6 +85,7 @@ const AddProductModal = ({ onClose, productFormData, onProductFormChange, onImag
                                     rows="4"
                                     value={productFormData.description}
                                     onChange={onProductFormChange}
+                                    required
                                 ></textarea>
                             </div>
                             <div className="mb-3">
@@ -51,17 +96,17 @@ const AddProductModal = ({ onClose, productFormData, onProductFormChange, onImag
                                     id="stock"
                                     value={productFormData.stock}
                                     onChange={onProductFormChange}
-                                />
+                                    required />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="price">Price</label>
                                 <input
-                                    type="number"
+                                    type="text"
                                     className="form-control"
                                     id="price"
                                     value={productFormData.price}
                                     onChange={onProductFormChange}
-                                />
+                                    required />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="productName">Product Name</label>
@@ -81,7 +126,7 @@ const AddProductModal = ({ onClose, productFormData, onProductFormChange, onImag
                                     id="brand"
                                     value={productFormData.brand}
                                     onChange={onProductFormChange}
-                                />
+                                    required />
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="image">Image</label>
@@ -91,7 +136,7 @@ const AddProductModal = ({ onClose, productFormData, onProductFormChange, onImag
                                     id="image"
                                     accept="image/*"
                                     onChange={onImageUpload}
-                                />
+                                    required />
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-secondary" onClick={onClose}>Close</button>

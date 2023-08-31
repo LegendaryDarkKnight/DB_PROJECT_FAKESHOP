@@ -29,7 +29,19 @@ async function getSingleProduct(productID){
     return ans;
 }
 
+async function getAllCategory(){
+    const options = {
+        outFormat: database.options.outFormat
+    };
+    const binds = {
+    };
+    const query = `SELECT CATEGORY
+                   FROM COMMON_INFO`;
+    const ans = await database.execute(query, binds, options);
+    return ans;
+}
 module.exports = {
     getAllProducts,
-    getSingleProduct
+    getSingleProduct,
+    getAllCategory
 };

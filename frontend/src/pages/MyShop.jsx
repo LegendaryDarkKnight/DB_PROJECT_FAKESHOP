@@ -18,12 +18,41 @@ const MyShop = () => {
     brand: '',
     image: null,
   });
-  const handleProductSubmit = (formData) => {
+  const handleProductSubmit = async (formData) => {
     // Show an alert with the submitted data
     const { image, ...otherData } = formData;
     const imageName = image ? image.name : 'No image uploaded';
     alert(`Image: ${imageName}\nData: ${JSON.stringify(otherData, null, 2)}`);
-  };
+    const data = {
+      category : productFormData.category,
+      description: productFormData.description,
+      stock: productFormData.stock,
+      price: parseInt(productFormData.price),
+      productName: productFormData.productName,
+      image: imageName,
+      brand: productFormData.brand
+    }
+    try {
+      const response = await fetch(`http://localhost:3000/shop/add`, {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+          credentials: 'include',
+      });
+      if (response.ok){
+          console.log('Product Added');
+          alert('Success')
+      }
+      else
+          console.log('trouble')
+  } catch (error) {
+      console.log('Error ordering:', error);
+      alert('Failed')
+  }
+  
+};
   const handleShopNameChange = (event) => {
     setShopName(event.target.value);
   };
