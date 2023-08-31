@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Menu from './Menu'; // Make sure to adjust the import path
 import '../styles/Cart.scss'
+import Modal from './Modal2';
 import { FaTimes } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const CartpropsCard = ({
     image,
@@ -67,7 +69,8 @@ CartpropsCard.propTypes = {
 const Cart = () => {
     const [cartData, setCartData] = useState([]);
     const [checkedItems, setCheckedItems] = useState([]);
-
+    const [isOpen, setIsOpen] = useState(false);
+    const navigate = useNavigate();
     const fetchCartData = async () => {
         try {
             const response = await fetch(`http://localhost:3000/cart`, {
@@ -78,19 +81,20 @@ const Cart = () => {
                 credentials: 'include',
             });
 
-            if(!response.ok){
+            if (!response.ok) {
                 console.log('not ok');
             }
             const data = await response.json();
-            console.log('dara'+ data);
+            console.log('dara' + data);
             setCartData(data.rows);
+            setCheckedItems(data.rows.map(item => item.STATUS === 'PICKED'))
         } catch (error) {
             console.log('Error fetching cart data:', error);
         }
     };
     const updateCart = async (productID, amount, totalPrice) => {
-        try { 
-           const response = await fetch(`http://localhost:3000/cart/update`, {
+        try {
+            const response = await fetch(`http://localhost:3000/cart/update`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -102,6 +106,24 @@ const Cart = () => {
                 console.log('updated');
             else
                 console.log('trouble')
+        } catch (error) {
+            console.log('Error fetching cart data:', error);
+        }
+    };
+    const updateCartStatus = async (productID, status) => {
+        try {
+            const response = await fetch(`http://localhost:3000/cart/updateStatus`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ productID: productID, status: status }),
+                credentials: 'include',
+            });
+            if (response.ok)
+                console.log('updated status');
+            else
+                console.log('trouble updating status')
         } catch (error) {
             console.log('Error fetching cart data:', error);
         }
@@ -140,26 +162,32 @@ const Cart = () => {
     const handleRemoveCartItem = async (itemIndex) => {
         const updatedCartData = cartData.filter((_, index) => index !== itemIndex);
         console.log(cartData[itemIndex].PRODUCT_ID);
-        await handleToggleCheckbox(itemIndex);
+
         await removeCart(cartData[itemIndex].PRODUCT_ID);
         setCartData(updatedCartData);
     };
 
     const handleToggleCheckbox = async (index) => {
         const updatedCartData = [...cartData];
-        updatedCartData[index].STATUS = updatedCartData[index].STATUS === 'Picked' ? 'Added' : 'Picked';
-        const updatedCheckedItems = updatedCartData.map(item => item.STATUS === 'Picked');
+        updatedCartData[index].STATUS = updatedCartData[index].STATUS === 'PICKED' ? 'ADDED' : 'PICKED';
+        const updatedCheckedItems = updatedCartData.map(item => item.STATUS === 'PICKED');
+        await updateCartStatus(cartData[index].PRODUCT_ID, updatedCartData[index].STATUS);
+        setCartData(updatedCartData);
         setCheckedItems(updatedCheckedItems);
     };
+
     const renderSelectedItemsTable = () => {
         return checkedItems.map((isChecked, index) => {
             if (isChecked) {
                 const item = cartData[index];
+
                 return (
-                    <tr key={item.PRODUCT_ID}>
-                        <td>{item.PRODUCT_NAME}</td>
-                        <td>{item.TOTAL_PRICE} Tk</td>
-                    </tr>
+                    <>
+                        {item && <tr key={item.PRODUCT_ID}>
+                            <td>{item.PRODUCT_NAME}</td>
+                            <td>{item.TOTAL_PRICE} Tk</td>
+                        </tr>}
+                    </>
                 );
             }
             return null;
@@ -167,11 +195,31 @@ const Cart = () => {
     };
     const handleConfirmOrder = async () => {
         const selectedItems = cartData.filter((_, index) => checkedItems[index]);
+        setIsOpen(true);
         console.log("Selected Items:", selectedItems);
+    };
+    const handlePurchasedOrder = async () => {
+        try {
+            const response = await fetch(`http://localhost:3000/order/place`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: 'include',
+            });
+            if (response.ok)
+                console.log('Ordered');
+            else
+                console.log('trouble')
+        } catch (error) {
+            console.log('Error ordering:', error);
+        }
+        navigate('/');
+        alert('SuccessFul');
     };
     const calculateTotalPrice = () => {
         const total = checkedItems.reduce((acc, isChecked, index) => {
-            if (isChecked) {
+            if (isChecked && cartData[index]) {
                 return acc + cartData[index].TOTAL_PRICE;
             }
             return acc;
@@ -194,7 +242,7 @@ const Cart = () => {
                 {cartData.map((contents, index) => (
                     <CartpropsCard
                         key={index}
-                        image={'../../productImage/'+contents.IMAGE}
+                        image={'../../productImage/' + contents.IMAGE}
                         name={contents.PRODUCT_NAME}
                         price={contents.TOTAL_PRICE}
                         singlePrice={contents.PRICE}
@@ -204,7 +252,7 @@ const Cart = () => {
                         onQuantityIncrease={() => handleQuantityChange(index, contents.QUANTITY + 1)}
                         onQuantityDecrease={() => handleQuantityChange(index, Math.max(contents.QUANTITY - 1, 1))}
                         onRemoveCartItem={handleRemoveCartItem}
-                        isChecked={checkedItems[index]}
+                        isChecked={contents.STATUS == 'PICKED'}
                         onToggleCheckbox={() => handleToggleCheckbox(index)}
                     />
                 ))}
@@ -239,11 +287,31 @@ const Cart = () => {
                     <button className="btn btn-primary btn-lg" onClick={handleConfirmOrder}>
                         Confirm Order
                     </button>
-                    <p className="mt-3 text-danger">
-                        Warning: Leaving the page will reset selected items.
-                    </p>
                 </div>
             </div>
+            <Modal open={isOpen} onClose={() => setIsOpen(false)}>
+                <div className="container mt-5">
+                    <table className="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Item Name</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {renderSelectedItemsTable()}
+                        </tbody>
+                    </table>
+                    <div className="text-center">
+                        <h4 className="mb-4">
+                            Total Price: {calculateTotalPrice()} Tk
+                        </h4>
+                        <button className="btn btn-primary btn-lg" onClick={handlePurchasedOrder}>
+                            Confirm Purchase
+                        </button>
+                    </div>
+                </div>
+            </Modal>
             <br />
             <br />
         </>

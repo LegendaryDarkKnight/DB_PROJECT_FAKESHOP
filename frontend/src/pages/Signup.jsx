@@ -44,11 +44,11 @@ const Signup = () => {
         x = await Validate.ValidateEmail(email);
         console.log(x);
         if(!x){
-            await alert('invalid email');
+           alert('invalid email');
         }
         x = await Validate.ValidatePassword(password);
         if(x!=''){
-            await alert(x);
+            alert(x);
         }
         if(password != password2)
         {
@@ -57,12 +57,12 @@ const Signup = () => {
         }
         if(contact.length!=11)
         {
-            await alert('Contact onnly of 11 digits');
+            alert('Contact onnly of 11 digits');
             return;
         }
 
         if(isNaN(parseInt(zip))){
-            await alert('Zip only Integers');
+            alert('Zip only Integers');
             return;
         }
 
@@ -83,7 +83,7 @@ const Signup = () => {
         } catch (error) {
             console.error("Error:", error);
         }
-        await alert('Succesfully Signed Up. Now log in');
+        alert('Succesfully Signed Up. Now log in');
         navigate('/login');        
     }
     const navigate = useNavigate();

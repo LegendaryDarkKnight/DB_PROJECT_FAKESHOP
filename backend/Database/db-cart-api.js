@@ -29,7 +29,7 @@ async function insertCart(userID,productID,amount,totalPrice){
         productID: productID,
         amount: amount,
         totalPrice: totalPrice,
-        status: 'Added'
+        status: 'ADDED'
     }
     const query = 
     `INSERT INTO CART(CUSTOMER_ID,PRODUCT_ID,AMOUNT,TOTAL_PRICE,STATUS)

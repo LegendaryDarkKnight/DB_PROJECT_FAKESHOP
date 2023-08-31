@@ -7,6 +7,7 @@ const database = require('./Database/database');
 const publicRouter = require('./routes/publicRouter');
 const cartRouter = require('./routes/cartRouter');
 const shopRouter = require('./routes/shopRouter');
+const orderRouter = require('./routes/orderRouter');
 
 app.use(cookieParser());
 app.use(express.json());
@@ -18,6 +19,7 @@ app.use(cors({
 app.use('/',publicRouter);
 app.use('/cart',cartRouter);
 app.use('/shop', shopRouter);
+app.use('/order', orderRouter);
 
 app.listen(process.env.PORT, async ()=>
 {

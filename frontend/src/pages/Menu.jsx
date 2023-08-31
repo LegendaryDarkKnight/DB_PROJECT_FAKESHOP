@@ -169,7 +169,7 @@ export default function Menu() {
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link className="dropdown-item" to={`/home`}>
+                                        <Link className="dropdown-item" to={`/myShop`}>
                                             My Shop
                                         </Link>
                                     </li>

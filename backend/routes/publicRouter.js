@@ -87,8 +87,10 @@ publicRouter.post('/signup', async(req,res)=>{
     try {
         console.log(req.body);
         await signUp(req.body);
+        res.status(200).send();
     } catch (error) {
         console.log(error)
     }
+    res.status(400).send();
 })
 module.exports = publicRouter;

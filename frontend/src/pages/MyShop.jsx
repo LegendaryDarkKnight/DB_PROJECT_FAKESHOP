@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import Sidebar from './Sidebar';
 import AddProductModal from './AddProductModal';
 import '../styles/MyShop.css'
+import Menu from './Menu';
 
-const ProfilePage = () => {
+const MyShop = () => {
   const [shopName, setShopName] = useState('My Shop');
   const [website, setWebsite] = useState('https://example.com');
   const [showAddProductModal, setShowAddProductModal] = useState(false);
@@ -65,6 +66,8 @@ const ProfilePage = () => {
   
 
   return (
+    <>
+    <Menu/>
     <div className="container mt-5">
       <div className="row">
         <div className="col-md-8">
@@ -96,7 +99,8 @@ const ProfilePage = () => {
         />
       )}
     </div>
+    </>
   );
 };
 
-export default ProfilePage;
+export default MyShop;

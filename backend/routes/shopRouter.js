@@ -21,7 +21,7 @@ shopRouter.get('/getProducts', async(req,res)=>{
 
 shopRouter.post('/add', async(req,res)=>{
     try {
-        console.log(req.user);
+        console.log(req.user.id);
         await addProduct(req.body,req.user.id);
         res.send(200).send();
     } catch (error) {

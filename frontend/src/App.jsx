@@ -9,6 +9,7 @@ import Test from "./pages/Test";
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { useState } from 'react'
 import MyProducts from './pages/MyProducts';
+import MyShop from './pages/MyShop';
 
 export const UserContext = React.createContext();
 
@@ -28,6 +29,7 @@ const App = () => {
             <Route path='/cart/' element={<Cart />}></Route>
             <Route path='/myProducts/' element={<MyProducts/>}></Route>
             <Route path='/test/' element={<Test />}></Route>
+            <Route path='/myShop/' element={<MyShop />}></Route>
           </Routes>
         </BrowserRouter>
       </UserContext.Provider>
