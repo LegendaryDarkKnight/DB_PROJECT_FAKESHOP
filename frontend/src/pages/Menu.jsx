@@ -19,26 +19,26 @@ const NavLink = ({ to, children }) => {
 export default function Menu() {
     const { userData, setUserData } = useContext(UserContext);
     const navigate = useNavigate();
-    const reloadUserData = async () => {
-        try {
-            const response = await fetch(`http://localhost:3000/getUserData`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: 'include',
-            });
+    // const reloadUserData = async () => {
+    //     try {
+    //         const response = await fetch(`http://localhost:3000/getUserData`, {
+    //             method: "GET",
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //             },
+    //             credentials: 'include',
+    //         });
 
-            if (!response.ok) {
-                console.error("Network response was not ok");
-            }
-            const data = await response.json();
-            setUserData(data);
-        } catch (error) {
-            console.log("Error:", error);
-        }
+    //         if (!response.ok) {
+    //             console.error("Network response was not ok");
+    //         }
+    //         const data = await response.json();
+    //         setUserData(data);
+    //     } catch (error) {
+    //         console.log("Error:", error);
+    //     }
 
-    }
+    // }
     useEffect(() => {
         let isCurrent = true;
 
@@ -88,12 +88,8 @@ export default function Menu() {
         } catch (error) {
             console.log("Error:", error);
         }
-        await setUserData(null);
+        setUserData(null);
         navigate('/');
-        // Clear the user data context
-        // history.push('/');
-        // Redirect to a desired route after logging out
-        // Redirect to the home page
     };
     return (
         <>
@@ -156,7 +152,7 @@ export default function Menu() {
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link className="dropdown-item" to={`/`}>
+                                        <Link className="dropdown-item" to={`/order`}>
                                             My Orders
                                         </Link>
                                     </li>

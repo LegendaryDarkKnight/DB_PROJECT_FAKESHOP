@@ -1,6 +1,6 @@
 const express = require('express')
 const { userAuth } = require('../middlewares/auth');
-const { test, placeOrder } = require('../Database/db-order-api');
+const { test, placeOrder, getOrderList } = require('../Database/db-order-api');
 
 const orderRouter = express.Router();
 
@@ -32,6 +32,17 @@ orderRouter.post('/test', async(req,res)=>{
     }
     catch(err){
         console.log(err);
+    }
+    res.status(400).send();
+})
+
+orderRouter.get('/getUserOrders', async(req,res)=>{
+    try {
+        const data = await getOrderList(req.user.id);
+        console.log(data);
+        res.send(data);
+    } catch (error) {
+        
     }
     res.status(400).send();
 })

@@ -1,0 +1,5 @@
+table.table-striped tbody tr.hover-effect:hover {
+    background-color: #f5f5f5;
+    cursor: pointer;
+  }
+  
