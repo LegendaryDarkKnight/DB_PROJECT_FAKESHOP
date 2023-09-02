@@ -40,7 +40,7 @@ export default function Menu() {
 
     // }
     useEffect(() => {
-        let isCurrent = true;
+        // let isCurrent = true;
 
         fetch(`http://localhost:3000/getUserData`, {
             method: "GET",
@@ -49,9 +49,9 @@ export default function Menu() {
             },
             credentials: 'include',
         }).then(res => res.json())
-            .then((userData) => {
-                if (isCurrent) {
-                    setUserData(userData);
+            .then((data) => {
+                if (!userData) {
+                    setUserData(data);
                 }
             })
             .catch((error) => {
@@ -59,15 +59,15 @@ export default function Menu() {
                 console.error('Error fetching user data:', error);
             })
             .finally(() => {
-                isCurrent = false; // Make sure to set isCurrent to false in the finally block
+                // isCurrent = false; // Make sure to set isCurrent to false in the finally block
             });
 
-        return () => {
-            isCurrent = false; // Set isCurrent to false when the effect cleanup is performed
-        };
+        // return () => {
+        //     isCurrent = false; // Set isCurrent to false when the effect cleanup is performed
+        // };
         // reloadUserData();
         // console.log(userData.rows[0].USER_TYPE)
-    }, [])
+    }, [userData])
     const handleLogout = async () => {
         // Perform any additional logout actions here
         // For example, clearing local storage, sending API requests, etc.
@@ -200,7 +200,7 @@ export default function Menu() {
                                         </Link>
                                     </li>
                                     <li>
-                                        <Link className="dropdown-item" to={`/cart`}>
+                                        <Link className="dropdown-item" to={`/shopOrder`}>
                                             Track Purchases
                                         </Link>
                                     </li>

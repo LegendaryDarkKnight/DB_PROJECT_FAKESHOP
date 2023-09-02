@@ -10,6 +10,7 @@ import Test from "./pages/Test";
 import MyProducts from './pages/MyProducts';
 import MyShop from './pages/MyShop';
 import MyOrder from './pages/MyOrder';
+import ShopOrder from './pages/ShopOrder'
 export const UserContext = createContext();
 
 const App = () => {
@@ -30,6 +31,7 @@ const App = () => {
             <Route path='/myProducts/' element={<MyProducts/>}></Route>
             <Route path='/test/' element={<Test />}></Route>
             <Route path='/myShop/' element={<MyShop />}></Route>
+            <Route path='/shopOrder/' element={<ShopOrder/>}></Route>
           </Routes>
         </BrowserRouter>
       </UserContext.Provider>
