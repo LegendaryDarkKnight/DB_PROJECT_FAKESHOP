@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken');
 
 
 async function loginUser(res, userId){
-    // ... create token
     const payload = {
         id: userId
     };
@@ -17,8 +16,24 @@ async function loginUser(res, userId){
     res.header('Access-Control-Allow-Credentials', 'true');
 }
 
+async function loginAdmin(res, userId){
+
+    const payload = {
+        superid: userId
+    };
+    let token = jwt.sign(payload, process.env.APP_SECRET);
+
+    let options = {
+        maxAge: 90000000,
+        httpOnly: true
+    }
+    res.cookie('adminSessionToken', token, options);
+    res.header('Access-Control-Allow-Credentials', 'true');
+}
+
 module.exports = {
-    loginUser
+    loginUser,
+    loginAdmin
 }
 
 // console.log(process.env.APP_SECRET)

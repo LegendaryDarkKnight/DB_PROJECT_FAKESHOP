@@ -8,10 +8,10 @@ const Home = () => {
     const profileImageSource = userData ? "../" + userData.rows[0].IMAGE : "";
     const [points, setPoints] = useState(0);
     const [editedUserData, setEditedUserData] = useState({}); // Store edited data
-    
+    const [reqMoney, setReqMoney] = useState(0)
     useEffect(() => {
         reloadWallet();
-    }, [userData,walletStatus]);
+    }, [userData, walletStatus]);
 
     const reloadWallet = async () => {
         try {
@@ -84,6 +84,26 @@ const Home = () => {
         }
     };
 
+    const requestMoney = async()=>{
+        try {
+            const response = await fetch("http://localhost:3000/recharge", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({amount:reqMoney}),
+                credentials: 'include',
+            });
+
+            if (!response.ok) {
+                console.error("Network response was not ok");
+                return;
+            }
+            setReqMoney(0);
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
     return (
         <>
             <Menu />
@@ -303,7 +323,7 @@ const Home = () => {
                                 <p className="mb-0">Points: {points}</p>
                             </div>
                         </div>
-            
+
                         {/* Reviews and Ratings Card */}
                         <div className="card mt-4">
                             <div className="card-header bg-success text-white">
@@ -317,6 +337,29 @@ const Home = () => {
                                     Show Review
                                 </button>
                             </div>
+                        </div>
+                        <div className="card mt-4">
+                            <div className="card-header bg-warning text-white">
+                                <h5 className="mb-0">Recharge Request</h5>
+                            </div>
+                            <form onSubmit={requestMoney}>
+                                <div className="card-body">
+                                    <input
+                                    type="number"
+                                    value={reqMoney} 
+                                    style={{
+                                        border: "2px",
+                                        padding: "10px",
+                                        borderRadius: "5px",
+                                        fontSize: "16px"
+                                    }}
+                                    onChange={(e)=>{setReqMoney(e.target.value)}}    
+                                    />
+                                    <button className="btn btn-warning mt-6 mx-4" type = "submit">
+                                        Submit
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>

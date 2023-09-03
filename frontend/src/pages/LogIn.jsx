@@ -23,6 +23,8 @@ const LogIn = () => {
 
                 if (!response.ok) {
                     console.error("Network response was not ok");
+                    alert('Wrong User or PassWord');
+                    return;
                 }
 
                 const data = await response.json();

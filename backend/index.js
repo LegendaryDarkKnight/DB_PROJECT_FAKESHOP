@@ -8,6 +8,7 @@ const publicRouter = require('./routes/publicRouter');
 const cartRouter = require('./routes/cartRouter');
 const shopRouter = require('./routes/shopRouter');
 const orderRouter = require('./routes/orderRouter');
+const adminRouter = require('./routes/adminRouter');
 
 app.use(cookieParser());
 app.use(express.json());
@@ -20,6 +21,7 @@ app.use('/',publicRouter);
 app.use('/cart',cartRouter);
 app.use('/shop', shopRouter);
 app.use('/order', orderRouter);
+app.use('/admin', adminRouter);
 
 app.listen(process.env.PORT, async ()=>
 {
@@ -31,7 +33,6 @@ app.listen(process.env.PORT, async ()=>
         process.exit(1);
     }
 });
-
 
 process
     .once('SIGTERM', database.shutdown)

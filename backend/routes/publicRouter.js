@@ -4,10 +4,9 @@ const publicRouter = express.Router();
 
 const { logIn, signUp } = require('../Database/db-login-api');
 const {getAllProducts, getSingleProduct, getAllCategory} = require('../Database/db-products-api');
-const { getWallet, getUser } = require('../Database/db-profile-api');
+const { getWallet, getUser, walletRechargeRequest } = require('../Database/db-profile-api');
 const { loginUser } = require('../utils/auth-utils');
 const { userAuth } = require('../middlewares/auth');
-const { hashPass, compareHash } = require('../utils/hash-utils');
 
 publicRouter.post('/signup', async(req,res)=>{
     try {
@@ -43,9 +42,9 @@ publicRouter.post('/login', async (req, res) => {
     res.status(401).send();
 });
 
-publicRouter.get('/logout',userAuth, (req, res) => {
-    console.log('cleared');
+publicRouter.get('/logout', (req, res) => {
     res.clearCookie('sessionToken');
+    console.log('cleared');
     res.json({ message: 'Logout successful' });
 });
 
@@ -104,5 +103,15 @@ publicRouter.get("/getCategory", async(req,res)=>{
         console.error("Error:", error);
         res.status(500).send("Internal Server Error");
     }
+})
+
+publicRouter.post('/recharge', userAuth, async(req,res)=>{
+    try {
+        await walletRechargeRequest(req.user.id,req.body.amount);
+        res.send();
+    } catch (error) {
+        
+    }
+    res.status(400).send();
 })
 module.exports = publicRouter;
