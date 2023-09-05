@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import Menu from './Menu';
 import '../styles/MyOrder.css';
+import { useNavigate } from 'react-router-dom';
 
 const ShopOrder = () => {
     const [orders, setOrders] = useState([]);
     const [searchText, setSearchText] = useState('');
-
+    const navigate = useNavigate();
     useEffect(() => {
         let isCurrent = true;
 
@@ -35,10 +36,25 @@ const ShopOrder = () => {
 
     }, []);
 
-    const handleReturnOrder = (orderId) => {
-        // Implement the logic to return the order here
-        // Example: send a request to your backend to process the return
-        // and then update the UI accordingly
+    const handleReturnOrder = async(orderID) => {
+        try {
+            const response = await fetch('http://localhost:3000/shop/dispatch',{
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({orderID: orderID}),
+                credentials: 'include',
+            })
+            if(!response.ok){
+                alert('Fault');
+                return;
+            }
+            alert('Success');
+            navigate('/shopOrder');
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     const filteredOrders = orders.filter((order) =>
@@ -93,12 +109,12 @@ const ShopOrder = () => {
                                 <td>{order.DELIVERY_STATUS}</td>
                                 <td>{order.DELIVERY_DATE ? order.DELIVERY_DATE : "NOT DECIDED"}</td>
                                 <td>
-                                    <button
+                                    {order.DELIVERY_STATUS == 'NOT DISPATCHED' &&<button
                                         className="btn btn-primary"
-                                        onClick={() => handleReturnOrder(order.PRODUCT_ID)}
+                                        onClick={() => handleReturnOrder(order.ORDER_ID)}
                                     >
                                         Dispatch
-                                    </button>
+                                    </button>}
                                 </td>
                             </tr>
                         ))}

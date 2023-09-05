@@ -15,6 +15,8 @@ import AdminHome from './AdminPages/Home';
 import AdminLogin from './AdminPages/AdminLogin'
 import TransactionTable from './AdminPages/TransactionTable';
 import UserRequest from './AdminPages/Userrequest';
+import PendinDelivery from './AdminPages/PendingDelivery'
+
 export const UserContext = createContext();
 
 const App = () => {
@@ -40,6 +42,7 @@ const App = () => {
             <Route path='/admin/login' element={<AdminLogin/>}></Route>
             <Route path='/admin/transaction' element={<TransactionTable/>}></Route>
             <Route path='/admin/userrequests' element={<UserRequest/>}></Route>
+            <Route path='/admin/courier-service' element={<PendinDelivery/>}></Route>
           </Routes>
         </BrowserRouter>
       </UserContext.Provider>

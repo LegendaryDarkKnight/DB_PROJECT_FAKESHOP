@@ -1,5 +1,6 @@
 import Sidebar from './Sidebar'
 import LoginHistory from './LoginHistory'
+
 const Home = () => {
     return (
         <>

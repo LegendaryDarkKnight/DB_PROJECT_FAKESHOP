@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Sidebar from './Sidebar'
 import './Transaction.css'
 function TransactionTable() {
   const [data, setData] = useState([]);
@@ -17,7 +18,7 @@ function TransactionTable() {
   }, []);
 
   return (
-    <div className='transaction-table'>
+    <div className='transaction-table' style={{maxHeight: "100vh", maxWidth:"80vw",overflowX: "auto",overflowY: "auto"}}>
       <h1>Transaction Table</h1>
       <table>
         <thead>
@@ -48,4 +49,16 @@ function TransactionTable() {
   );
 }
 
-export default TransactionTable;
+function TableBody(){
+  return (
+    <>
+        <div className="container-fluid">
+            <div className="row flex-nowrap">
+                <Sidebar></Sidebar>
+                <TransactionTable/>
+            </div>
+        </div>
+    </>
+)
+}
+export default TableBody;

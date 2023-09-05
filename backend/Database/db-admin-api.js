@@ -1,6 +1,6 @@
 const database = require('./database');
 
-async function logIn(email){
+async function logIn(email) {
     const options = {
         outFormat: database.options.outFormat
     };
@@ -12,61 +12,64 @@ async function logIn(email){
     return ans;
 }
 
-async function getAdmin(id){
+async function getAdmin(id) {
     const options = {
         outFormat: database.options.outFormat
     };
     const binds = {
         id: id
     };
-    
+
     const ans = await database.execute(`SELECT * FROM SITE_EMPLOYEES WHERE EMPLOYEE_ID = :id`, binds, options);
     return ans;
 }
-async function getRechargeOrder(){
+async function getRechargeOrder() {
     const options = {
         outFormat: database.options.outFormat
     };
     const binds = {};
-    
+
     const ans = await database.execute(
         `SELECT *
-        FROM WALLET_REQUEST`, 
+        FROM WALLET_REQUEST`,
         binds, options);
     return ans;
 }
 
-async function accept_recharge(id,time){
+async function accept_recharge(id) {
     const options = {
         outFormat: database.options.outFormat
     };
     const binds = {
         id: id,
-        time: time
     };
-    
+
     const query = ` DECLARE
           INCREASED_AMOUNT NUMBER;
+          U_ID NUMBER;
           BEGIN
           SELECT REQUEST_AMOUNT INTO INCREASED_AMOUNT
           FROM WALLET_REQUEST
-          WHERE USER_ID=:id AND REQUEST_TIME=:time;
+          WHERE REQUEST_ID=:id ;
+          SELECT USER_ID INTO U_ID
+          FROM WALLET_REQUEST
+          WHERE REQUEST_ID=:id ;
           DELETE FROM WALLET_REQUEST
-          WHERE USER_ID=:id AND REQUEST_TIME=:time;
+          WHERE REQUEST_ID=:id ;
           UPDATE WALLET
           SET TOTAL_CREDITS=TOTAL_CREDITS+INCREASED_AMOUNT
-          WHERE WALLET_ID=:id;
+          WHERE WALLET_ID=U_ID;
           END;
-                    `
-    await database.execute(query,binds,options);
+          `
+    await database.execute(query, binds, options);
 }
 
-async function getAllTransaction(){
+async function getAllTransaction() {
     const options = {
         outFormat: database.options.outFormat
     };
     const binds = {};
-    
+
     const ans = await database.execute(
         `SELECT t1.TRANSACTION_ID TRANSACTION_ID,t1.AMOUNT AMOUNT,t1.PURCHASING_DATE PURCHASING_DATE,p1.PRODUCT_NAME PRODUCT_NAME,u1.EMAIL_ID CUSTOMER_MAIL,u2.EMAIL_ID SHOP_MAIL
         FROM TRANSACTION t1
@@ -77,7 +80,36 @@ async function getAllTransaction(){
         JOIN ALL_USERS u1
         on u1.USER_ID=c1.CUSTOMER_ID
         JOIN ALL_USERS u2
-        ON u2.USER_ID=p1.SHOP_ID `, 
+        ON u2.USER_ID=p1.SHOP_ID `,
+        binds, options);
+    return ans;
+}
+
+async function getPendingDeliveries(id) {
+    const options = {
+        outFormat: database.options.outFormat
+    };
+    const binds = {
+        id: id,
+    };
+
+    const ans = await database.execute(
+        `
+    SELECT p2.IMAGE IMAGE,p2.PRODUCT_ID PRODUCT_ID,p2.PRODUCT_NAME PRODUCT_NAME,
+    (SELECT SHOP_NAME FROM SHOP WHERE SHOP_ID=u1.USER_ID) SHOP_NAME,
+    (u2.FIRST_NAME||' '||u2.LAST_NAME) NAME,u2.CONTACT CONTACT,
+    (u2.CITY) ADDRESS
+    FROM PURCHASED_ORDER p1 
+    JOIN CUSTOMER_ORDER c2
+    ON p1.ORDER_ID=c2.ORDER_ID
+    JOIN PRODUCT p2
+    ON p2.PRODUCT_ID=c2.PRODUCT_ID
+    JOIN ALL_USERS u1
+    ON u1.USER_ID=p2.SHOP_ID
+    JOIN ALL_USERS u2
+    ON u2.USER_ID=c2.CUSTOMER_ID
+    WHERE UPPER(p1.DELIVERY_STATUS)='NOT DELIVERED' AND (SELECT c1.CURRENT_CITY FROM COURIER_SERVICE c1 WHERE c1.EMPLOYEE_ID=:id)=u1.CITY
+        `,
         binds, options);
     return ans;
 }
@@ -87,5 +119,6 @@ module.exports = {
     getAdmin,
     getRechargeOrder,
     accept_recharge,
-    getAllTransaction
+    getAllTransaction,
+    getPendingDeliveries
 }

@@ -36,7 +36,7 @@ async function getOrderList(customerID){
         customerID: customerID
     };
     const query = ` SELECT p1.PRODUCT_ID PRODUCT_ID, p1.PRODUCT_NAME PRODUCT_NAME,
-                    p1.IMAGE IMAGE,
+                    p1.IMAGE IMAGE, c1.ORDER_ID ORDER_ID,
                     (SELECT AMOUNT FROM TRANSACTION WHERE ORDER_ID = c1.ORDER_ID) COST,
                     TO_CHAR(c1.ORDER_DATE,'DD/MONTH/YYYY') ORDERED_ON,
                     p2.DELIVERY_STATUS DELIVERY_STATUS, TO_CHAR(p2.DELIVERY_DATE,'DD/MONTH/YYYY') DELIVERY_DATE
@@ -57,8 +57,10 @@ async function getShopOrderList(shopID){
     const binds = {
         shopID: shopID
     };
-    const query = `SELECT p1.PRODUCT_ID PRODUCT_ID, p1.PRODUCT_NAME PRODUCT_NAME,
-                    p1.IMAGE IMAGE,
+    
+    const query = `
+    SELECT p1.PRODUCT_ID PRODUCT_ID, p1.PRODUCT_NAME PRODUCT_NAME,
+    p1.IMAGE IMAGE, c1.ORDER_ID ORDER_ID,
     (SELECT AMOUNT FROM TRANSACTION WHERE ORDER_ID = c1.ORDER_ID) COST,
     TO_CHAR(c1.ORDER_DATE,'DD/MONTH/YYYY') ORDERED_ON,
      p2.DELIVERY_STATUS DELIVERY_STATUS, TO_CHAR(p2.DELIVERY_DATE,'DD/MONTH/YYYY') DELIVERY_DATE,

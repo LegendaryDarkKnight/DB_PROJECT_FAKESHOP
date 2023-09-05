@@ -58,38 +58,38 @@ const Sidebar = () => {
     return (
         <>
             <div className="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
-                <div className="d-flex flex-column align-items-start px-3 pt-2 text-white min-vh-100">
+                <div className="d-flex flex-column align-items-start px-3 pt-2 text-white min-vh-100 sticky-top">
                     <Link to="/admin" className="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                         <span className="fs-5 d-none d-sm-inline">Home</span>
                     </Link>
-                    <br/>
-                    <br/>
-                    {userData && (
+                    <br />
+                    <br />
+                    {userData && userData[0].ROLE == 'ADMIN' && (
                         <>
                             <Link to="/admin/transaction" className="nav-link px-0">
                                 <div className="d-flex align-items-center">
                                     <BsSpeedometer2 /> <span className="ms-1 d-none d-sm-inline">Transactions</span>
                                 </div>
                             </Link>
-                            <br/>
+                            <br />
                             <Link to="/admin/userrequests" className="nav-link px-0">
                                 <div className="d-flex align-items-center">
                                     <BsPeople /> <span className="ms-1 d-none d-sm-inline">User Requests</span>
                                 </div>
                             </Link>
-                            <br/>
+                            <br />
                             <Link to="/admin/loginhistory" className="nav-link px-0">
                                 <div className="d-flex align-items-center">
                                     <BsClockHistory /> <span className="ms-1 d-none d-sm-inline">Login History</span>
                                 </div>
                             </Link>
-                            <br/>
+                            <br />
                             <Link to="/admin/add-customer-care" className="nav-link px-0">
                                 <div className="d-flex align-items-center">
                                     <span className="ms-1 d-none d-sm-inline">Add Customer Care</span>
                                 </div>
                             </Link>
-                            <br/>
+                            <br />
                             <Link to="/admin/add-courier-service" className="nav-link px-0">
                                 <div className="d-flex align-items-center">
                                     <span className="ms-1 d-none d-sm-inline">Add Courier Service</span>
@@ -98,8 +98,24 @@ const Sidebar = () => {
                             <hr />
                         </>
                     )}
-                    <br/>
-                    <br/>
+                    {userData && userData[0].ROLE == 'COURIER' &&
+                        <>
+                            <Link to="/admin/courier-service" className="nav-link px-0">
+                                <div className="d-flex align-items-center">
+                                    <span className="ms-1 d-none d-sm-inline">Show Pending Deliveries</span>
+                                </div>
+                            </Link>
+                        </>
+                    }
+                    {userData && userData[0].ROLE == 'CUSTOMER_CARE' &&
+                        <Link to="/admin/customer-care" className="nav-link px-0">
+                            <div className="d-flex align-items-center">
+                                <span className="ms-1 d-none d-sm-inline">Show Return Requests </span>
+                            </div>
+                        </Link>
+                    }
+                    <br />
+                    <br />
                     {!userData && (
                         <div className="nav-item">
                             <Link className="nav-link" to="/admin/login" style={{ color: "white" }}>
@@ -111,7 +127,6 @@ const Sidebar = () => {
                     {userData && (
                         <div className="dropdown">
                             <a href="#" className="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="https://github.com/mdo.png" alt="hugenerd" width={30} height={30} className="rounded-circle" />
                                 <span className="d-none d-sm-inline mx-1">{userData[0].EMAIL_ID}</span>
                             </a>
                             <ul className="dropdown-menu dropdown-menu-dark text-small shadow">

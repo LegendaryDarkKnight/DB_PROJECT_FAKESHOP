@@ -66,7 +66,7 @@ publicRouter.get("/getUserData", userAuth, async (req, res) => {
         const data = await getUser(req.user.id);
         res.json(data);
     } catch (error) {
-        console.error("Error:", error);
+        console.error("Error 2 :", error);
         res.status(500).send("Internal Server Error");
     }
 });//passed

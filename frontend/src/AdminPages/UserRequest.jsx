@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
+import Sidebar from './Sidebar';
 function UserRequest() {
     const [requestData, setRequestData] = useState([]);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Fetch data from your API and update the state
         fetch('http://localhost:3000/admin/getRechargeOrder', {
-            method: "GET",
+            method: 'GET',
             headers: {
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json',
             },
             credentials: 'include',
         })
@@ -19,16 +22,31 @@ function UserRequest() {
             .catch((error) => {
                 console.error('Error fetching data:', error);
             });
+        console.log(requestData)
     }, []); // Empty dependency array to ensure the effect runs only once
 
-    const handleApproveClick = async(userId) => {
+    const handleApproveClick = async (id, event) => {
+        event.preventDefault(); // Prevent the default form submission
         // Implement logic to handle the "Approve" button click for the specific user
         // You can make another API request or update the state as needed
-        console.log(`Approve button clicked for USER_ID: ${userId}`);
+        const response = await fetch('http://localhost:3000/admin/acceptrecharge',{
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({id: id}),
+            credentials: 'include'
+        });
+        if(!response.ok){
+            alert('Failed');
+            return;
+        }
+        alert(`Approve button clicked for USER_ID: ${time}`);
+        // navigate('/admin/userrequests');
     };
 
     return (
-        <div>
+        <div style={{maxHeight: "100vh", maxWidth:"80vw",overflowX: "auto",overflowY: "auto"}}>
             <h1>User Request Table</h1>
             <table>
                 <thead>
@@ -40,15 +58,17 @@ function UserRequest() {
                     </tr>
                 </thead>
                 <tbody>
-                    {requestData.map((item) => (
-                        <tr key={item.USER_ID}>
+                    {requestData.map((item, index) => (
+                        <tr key={index}>
                             <td>{item.USER_ID}</td>
                             <td>{item.REQUEST_TIME}</td>
                             <td>{item.REQUEST_AMOUNT}</td>
                             <td>
-                                <button onClick={() => handleApproveClick(item.USER_ID)}>
-                                    Approve
-                                </button>
+                                <form onSubmit={(event) => handleApproveClick(item.REQUEST_ID, event)}>
+                                    <button type="submit" className="btn-success">
+                                        Approve
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     ))}
@@ -57,5 +77,16 @@ function UserRequest() {
         </div>
     );
 }
-
-export default UserRequest;
+function TableBody(){
+    return (
+      <>
+          <div className="container-fluid">
+              <div className="row flex-nowrap">
+                  <Sidebar></Sidebar>
+                  <UserRequest/>
+              </div>
+          </div>
+      </>
+  )
+  }
+export default TableBody;

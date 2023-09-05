@@ -93,11 +93,27 @@ async function getProductsOfShop(shopID){
                     WHERE SHOP_ID = :shopID`
     return await database.execute(query,binds,options);
 }
+
+async function dispatchProduct( orderID){
+    const options = {
+        outFormat: database.options.outFormat
+    };
+    const binds = {
+        orderID: orderID
+    };
+    const query = `
+    UPDATE PURCHASED_ORDER
+    SET DELIVERY_STATUS = 'NOT DELIVERED'
+    WHERE ORDER_ID = :orderID
+    `;
+   await database.execute(query,binds,options);
+}
 module.exports = {
     addProduct,
     removeProduct,
     updateStock,
     updatePrice,
     updateName,
-    getProductsOfShop
+    getProductsOfShop,
+    dispatchProduct
 }

@@ -1,7 +1,7 @@
 const express = require('express');
 
 const { userAuth } = require('../middlewares/auth');
-const { addProduct, removeProduct, updateStock, updatePrice, updateName, getProductsOfShop } = require('../Database/db-shop-api');
+const { addProduct, removeProduct, updateStock, updatePrice, updateName, getProductsOfShop, dispatchProduct } = require('../Database/db-shop-api');
 
 const shopRouter = express.Router();
 
@@ -69,4 +69,15 @@ shopRouter.post('/update', async(req,res)=>{
     res.status(400).send();
 })
 
+shopRouter.post('/dispatch', async(req,res)=>{
+    try {
+        console.log('Request Body');
+        console.log(req.body);
+        await dispatchProduct(req.body.orderID);
+        res.send();
+    } catch (error) {
+        console.log(error);
+    }
+    res.status(404).send();
+})
 module.exports = shopRouter;
