@@ -1,0 +1,77 @@
+/* Apply basic styling to the messaging app */
+.messenger-container {
+    max-width: 400px;
+    margin: 20px auto 0;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: white;
+  }
+  
+  .messenger-header {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  .message-container {
+    margin-bottom: 20px;
+    max-height: 250px; /* Set a maximum height for the message container */
+    overflow-y: auto; /* Enable vertical scrolling when needed */
+  }
+  
+  .message {
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 70%;
+    margin-bottom: 10px;
+    word-wrap: break-word;
+  }
+  
+  .message-text {
+    padding: 10px;
+  }
+  
+  /* Left-align user1's messages */
+  .left {
+    background-color: #bfc2fe;
+    align-self: flex-start;
+    margin-left: auto;
+  }
+  
+  /* Right-align user2's messages */
+  .right {
+    background-color: #0084ff;
+    color: #fff;
+    align-self: flex-end;
+    margin-right: auto;
+  }
+  
+  .message-input {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f1f0f0;
+    border-radius: 5px;
+    padding: 10px;
+  }
+  
+  .message-input input {
+    flex-grow: 1;
+    border: none;
+    padding: 5px;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
+  
+  .message-input button {
+    background-color: #0084ff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  

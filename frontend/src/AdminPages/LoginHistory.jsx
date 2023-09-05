@@ -6,20 +6,20 @@ const LoginHistory = () => {
     useEffect(() => {
         // Fetch recent login history data from your API or database here
         // Replace this with your actual API endpoint
-        fetch('http://localhost:3000/recent-login-history', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                setLoginHistory(data);
-            })
-            .catch((error) => {
-                console.error('Error fetching recent login history:', error);
-            });
+        // fetch('http://localhost:3000/recent-login-history', {
+        //     method: 'GET',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     credentials: 'include',
+        // })
+        //     .then((response) => response.json())
+        //     .then((data) => {
+        //         setLoginHistory(data);
+        //     })
+        //     .catch((error) => {
+        //         console.error('Error fetching recent login history:', error);
+        //     });
     }, []);
 
     return (

@@ -17,7 +17,7 @@ const userAuth = (req, res, next) => {
                 const decodedId = decoded.id;
                 console.log('id '+decodedId);
                 let results = await getUser(decodedId);
-                if (results.length == 0) {
+                if (!results || results.length == 0) {
                     console.log('auth: invalid cookie');
                 }
                 else {
@@ -53,7 +53,7 @@ const userAuthAdmin = (req, res, next) => {
                 const decodedId = decoded.superid;
                 console.log('id '+decodedId);
                 let results = await getAdmin(decodedId);
-                if (results.length == 0) {
+                if (!results || results.length == 0) {
                     console.log('auth: invalid cookie');
                 }
                 else {
@@ -67,7 +67,8 @@ const userAuthAdmin = (req, res, next) => {
                 next();
             }
         })
-    }  else {
+    }  
+    else {
         next();
     } 
 

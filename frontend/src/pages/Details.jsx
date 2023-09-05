@@ -4,6 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import Menu from './Menu'
 import { FiShoppingCart } from "react-icons/fi";
 import { UserContext } from "../App";
+import Modal from './Modal'
+import MessagingApp from "./MessagingApp";
 
 const Rating = ({ value, onClick }) => {
     const maxStars = 5;
@@ -115,6 +117,7 @@ const ProductDetailsPage = () => {
     const [productData, setProductData] = useState(null);
     const { userData } = useContext(UserContext);
     const [reviews, setReviews] = useState([]);
+    const [isOpen,setIsOpen] = useState(false);
 
     const navigate = useNavigate();
     const ReloadData = async () => {
@@ -228,11 +231,6 @@ const ProductDetailsPage = () => {
         }
     };
 
-
-    const addReview = (review) => {
-        // setReviews([...reviews, review]);
-    };
-
     return (
         <>
             <Menu />
@@ -246,10 +244,19 @@ const ProductDetailsPage = () => {
                         <p>{productData.rows[0].DESCRIPTION}</p>
                         <h4>Price: {productData.rows[0].PRICE}</h4>
                         <Rating value={productData.rows[0].RATING} />
-                        <button className="btn btn-primary mx-5" style={{ backgroundColor: 'orange', border: 'none' }} onClick={handleAddToCart}><FiShoppingCart /> Add to Cart</button>
+                        <br/>
+                        <br/>
+                        <button className="btn btn-primary" style={{ backgroundColor: 'orange', border: 'none' }} onClick={handleAddToCart}><FiShoppingCart /> Add to Cart</button>
+                        <button className="btn btn-primary mx-5" style={{ backgroundColor: 'red', border: 'none' }} onClick={()=>{setIsOpen(true)}}>Ask About Product</button>
                     </div>
                 </div>
+                <div className="sticky-top">
+                {userData && <Modal open={isOpen} onClose={() => setIsOpen(false)}>
+                    <MessagingApp user1={userData.rows[0].USER_ID} user2={productData.rows[0].SHOP_ID}/>
+                </Modal>}
+                </div>
                 <hr />
+
                 <ReviewForm userData={userData} productID={productID} />
                 <div className="mt-4">
                     <h3>Customer Reviews</h3>
@@ -268,6 +275,9 @@ const ProductDetailsPage = () => {
                     )}
 
                 </div>
+            </div>}
+            {!productData && <div>
+                No data Found
             </div>}
         </>
     );

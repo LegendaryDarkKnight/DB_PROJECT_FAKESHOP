@@ -4,7 +4,7 @@ const publicRouter = express.Router();
 
 const { logIn, signUp } = require('../Database/db-login-api');
 const {getAllProducts, getSingleProduct, getAllCategory, addRating, addReview, getReview} = require('../Database/db-products-api');
-const { getWallet, getUser, walletRechargeRequest } = require('../Database/db-profile-api');
+const { getWallet, getUser, walletRechargeRequest, sendMessages, getMessages } = require('../Database/db-profile-api');
 const { loginUser } = require('../utils/auth-utils');
 const { userAuth } = require('../middlewares/auth');
 
@@ -146,5 +146,26 @@ publicRouter.post('/getReview', userAuth, async(req,res)=>{
         console.log(error);
     }
     res.status(400).send();
+})
+
+publicRouter.post('/sendMessages',userAuth,async (req,res)=>{
+    try {
+        await sendMessages(req.user.id,req.body.shopID,req.body.text1);
+        res.send();
+    } catch (error) {
+        console.log(error);
+    }
+    res.status(500).send();
+})
+
+publicRouter.post('/getMessages',userAuth,async (req,res)=>{
+    try {
+        const data = await getMessages(req.user.id,req.body.shopID);
+        console.log(data)
+        res.send(data);
+    } catch (error) {
+        console.log(error);
+    }
+    res.status(500).send();
 })
 module.exports = publicRouter;
