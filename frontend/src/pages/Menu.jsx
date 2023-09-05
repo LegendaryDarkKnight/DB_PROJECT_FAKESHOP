@@ -19,54 +19,57 @@ const NavLink = ({ to, children }) => {
 export default function Menu() {
     const { userData, setUserData } = useContext(UserContext);
     const navigate = useNavigate();
-    // const reloadUserData = async () => {
-    //     try {
-    //         const response = await fetch(`http://localhost:3000/getUserData`, {
-    //             method: "GET",
-    //             headers: {
-    //                 "Content-Type": "application/json",
-    //             },
-    //             credentials: 'include',
-    //         });
-
-    //         if (!response.ok) {
-    //             console.error("Network response was not ok");
-    //         }
-    //         const data = await response.json();
-    //         setUserData(data);
-    //     } catch (error) {
-    //         console.log("Error:", error);
-    //     }
-
-    // }
-    useEffect(() => {
-        let isCurrent = true;
-
-        fetch(`http://localhost:3000/getUserData`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials: 'include',
-        }).then(res => res.json())
-            .then((data) => {
-                if (isCurrent) {
-                    setUserData(data);
-                }
-            })
-            .catch((error) => {
-                // Handle any errors that occur during the fetch request
-                console.error('Error fetching user data:', error);
-            })
-            .finally(() => {
-                isCurrent = false; // Make sure to set isCurrent to false in the finally block
+    const reloadUserData = async () => {
+        try {
+            const response = await fetch(`http://localhost:3000/getUserData`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: 'include',
             });
 
-        return () => {
-            isCurrent = false; // Set isCurrent to false when the effect cleanup is performed
-        };
-        // reloadUserData();
-        // console.log(userData.rows[0].USER_TYPE)
+            if (!response.ok) {
+                console.error("Network response was not ok");
+            }
+            else{
+            const data = await response.json();
+            setUserData(data);
+            }
+        } catch (error) {
+            console.log("Error:", error);
+        }
+
+    }
+    useEffect(() => {
+        reloadUserData();
+        // let isCurrent = true;
+
+        // fetch(`http://localhost:3000/getUserData`, {
+        //     method: "GET",
+        //     headers: {
+        //         "Content-Type": "application/json",
+        //     },
+        //     credentials: 'include',
+        // }).then(res => res.json())
+        //     .then((data) => {
+        //         if (isCurrent) {
+        //             setUserData(data);
+        //         }
+        //     })
+        //     .catch((error) => {
+        //         // Handle any errors that occur during the fetch request
+        //         console.error('Error fetching user data:', error);
+        //     })
+        //     .finally(() => {
+        //         isCurrent = false; // Make sure to set isCurrent to false in the finally block
+        //     });
+
+        // return () => {
+        //     isCurrent = false; // Set isCurrent to false when the effect cleanup is performed
+        // };
+        // // reloadUserData();
+        // // console.log(userData.rows[0].USER_TYPE)
     }, [])
     const handleLogout = async () => {
         // Perform any additional logout actions here
@@ -90,6 +93,7 @@ export default function Menu() {
         }
         setUserData(null);
         navigate('/');
+        window.location.reload();
     };
     return (
         <>

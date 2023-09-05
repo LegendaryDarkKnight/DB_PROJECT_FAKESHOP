@@ -27,15 +27,63 @@ const Rating = ({ value, onClick }) => {
     );
 };
 
-const ReviewForm = ({ onSubmit }) => {
-    const [rating, setRating] = useState(0);
+const ReviewForm = (props) => {
+    const [rating, setRating] = useState(5);
     const [comment, setComment] = useState('');
+    async function submitRating() {
+        try {
+            const response = await fetch('http://localhost:3000/addRating', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ productID: props.productID, rate: rating }),
+                credentials: 'include',
+            });
+            if (!response.ok) {
+                console.log('Error Occured Rating')
+            }
+        } catch (error) {
+            console.log('Error Occured Rating')
+        }
+    }
 
-    const handleSubmit = (e) => {
+    async function submitReview() {
+        try {
+            const response = await fetch('http://localhost:3000/addReview', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ productID: props.productID, comment: comment }),
+                credentials: 'include',
+            });
+            if (!response.ok) {
+                console.log('Error Occured Review')
+            }
+        } catch (error) {
+            console.log('Error Occured Review')
+        }
+    }
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        onSubmit({ rating, comment });
-        setRating(0);
+        if (!props.userData) {
+            alert('Login Please');
+            return;
+        }
+        if (props.userData.rows[0].USER_TYPE == 'SHOP') {
+            alert('You Have to Be Customer to Post rating');
+            return;
+        }
+        if (comment.trim().length == 0) {
+            alert('Empty Comment');
+            return;
+        }
+        await submitRating();
+        await submitReview();
+        setRating(5);
         setComment('');
+        window.location.reload();
     };
 
     return (
@@ -66,9 +114,11 @@ const ProductDetailsPage = () => {
     const { productID } = useParams();
     const [productData, setProductData] = useState(null);
     const { userData } = useContext(UserContext);
-    console.log(productID);
+    const [reviews, setReviews] = useState([]);
+
     const navigate = useNavigate();
     const ReloadData = async () => {
+
         try {
             const response = await fetch("http://localhost:3000/getSingleProduct", {
                 method: "POST",
@@ -90,6 +140,28 @@ const ProductDetailsPage = () => {
         } catch (error) {
             console.error("Error:", error);
         }
+
+        try {
+            const response = await fetch("http://localhost:3000/getReview", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ productID: productID }),
+                credentials: 'include',
+            });
+
+            if (!response.ok) {
+                console.error("Network response was not ok");
+                return;
+            }
+
+            const data = await response.json();
+            setReviews(data.rows);
+        } catch (error) {
+            console.error("Error:", error);
+        }
+
     }
     useEffect(() => {
         ReloadData();
@@ -157,18 +229,8 @@ const ProductDetailsPage = () => {
     };
 
 
-    const product = {
-        name: 'Sample Product',
-        description: productID,
-        price: '$99.99',
-        imageUrl: 'sample_image.jpg', // Replace with actual image URL
-    };
-
-
-    const [reviews, setReviews] = useState([]);
-
     const addReview = (review) => {
-        setReviews([...reviews, review]);
+        // setReviews([...reviews, review]);
     };
 
     return (
@@ -177,7 +239,7 @@ const ProductDetailsPage = () => {
             {productData && <div className="container my-5">
                 <div className="row">
                     <div className="col-md-6">
-                        <img src={'../../productImage/' + productData.rows[0].IMAGE} alt={product.name} className="img-fluid" />
+                        <img src={'../../productImage/' + productData.rows[0].IMAGE} alt={productData.rows[0].PRODUCT_NAME} className="img-fluid" />
                     </div>
                     <div className="col-md-6">
                         <h2>{productData.rows[0].PRODUCT_NAME}</h2>
@@ -188,21 +250,23 @@ const ProductDetailsPage = () => {
                     </div>
                 </div>
                 <hr />
-                <ReviewForm onSubmit={addReview} />
+                <ReviewForm userData={userData} productID={productID} />
                 <div className="mt-4">
                     <h3>Customer Reviews</h3>
-                    {reviews.length === 0 ? (
+                    {!reviews ? (
                         <p>No reviews yet.</p>
                     ) : (
                         <ul className="list-unstyled">
                             {reviews.map((review, index) => (
                                 <li key={index}>
-                                    <Rating value={review.rating} />
-                                    <p>{review.comment}</p>
+                                    <Rating value={review.STARS} />
+                                    <h6>{review.EMAIL_ID}</h6>
+                                    {review.ALL_COMMENT && <p dangerouslySetInnerHTML={{ __html: review.ALL_COMMENT.split('\n').join('<br />') }} />}
                                 </li>
                             ))}
                         </ul>
                     )}
+
                 </div>
             </div>}
         </>

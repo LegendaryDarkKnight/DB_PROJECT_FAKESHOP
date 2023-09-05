@@ -41,8 +41,9 @@ function UserRequest() {
             alert('Failed');
             return;
         }
-        alert(`Approve button clicked for USER_ID: ${time}`);
+        alert(`Granted`);
         // navigate('/admin/userrequests');
+        window.location.reload();
     };
 
     return (

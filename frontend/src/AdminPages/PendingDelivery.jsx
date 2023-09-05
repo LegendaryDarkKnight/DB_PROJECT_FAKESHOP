@@ -3,21 +3,41 @@ import Sidebar from './Sidebar'
 import Modal from './Modal'
 
 function ProductCard(props) {
-    const { productName, shopName, customerContact, Name, Image } = props;
+    const { productName, shopName, customerContact, Name, Image, Address, orderID} = props;
     const [isOpen, setIsOpen] = useState(false);
-    const handleDeliverClick = () => {
+    const handleDeliverClick = async() => {
         // Add your logic for handling the delivery button click here
+        try {
+            const response = await fetch('http://localhost:3000/admin/deliver', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({orderID:orderID}),
+                credentials: 'include',
+            })
+            if(!response.ok){
+                alert('Response Not Ok');
+                return; 
+            }
+            
+        } catch (error) {
+            alert('Error Found');
+            return;
+        }
         alert(`Delivering ${productName} to ${customerContact}`);
+        window.location.reload();
     };
 
     return (
-        <div className="product-card card" style={{ height: "200px", marginTop: '10px', maxWidth: '100vw', width: '1000px' }}>
+        <div className="product-card card" style={{ height: "210px", marginTop: '20px', maxWidth: '100vw', width: '600px' }}>
             <div className="card-body">
                 <h6 className="card-title">Customer Name: {Name}</h6>
                 <p className="card-text">Shop: {shopName}</p>
                 <p className="card-text">Customer Contact: {customerContact}</p>
+                <p className="card-text">Customer Address: {Address}</p>
                 <div className='row'>
-                    <div className='col-6'>
+                    <div className='col-9'>
                         <button
                             className="btn btn-warning"
                             onClick={() => { setIsOpen(true) }}
@@ -90,7 +110,7 @@ function PendingDelivery() {
                         console.table(productData)
                     }
                     <div>
-                        <h1>Pending Deliveries</h1>
+                        <h1 style={{marginLeft:'100px'}}>Pending Deliveries</h1>
                         {productData.map((product, index) => (
                             <ProductCard
                                 key={index}
@@ -99,6 +119,8 @@ function PendingDelivery() {
                                 shopName={product.SHOP_NAME}
                                 customerContact={product.CONTACT}
                                 Image = {'../../productImage/'+product.IMAGE}
+                                Address = {product.ADDRESS}
+                                orderID = {product.ORDER_ID}
                             />
                         ))}
                     </div>

@@ -1,5 +1,5 @@
 const express = require('express');
-const { logIn, getAdmin, getAllTransaction, getRechargeOrder, accept_recharge, getPendingDeliveries } = require('../Database/db-admin-api');
+const { logIn, getAdmin, getAllTransaction, getRechargeOrder, accept_recharge, getPendingDeliveries, DeliverProduct } = require('../Database/db-admin-api');
 const { loginAdmin } = require('../utils/auth-utils');
 const { userAuthAdmin } = require('../middlewares/auth');
 
@@ -86,5 +86,18 @@ adminRouter.get('/pendingDelivery', userAuthAdmin, async(req,res)=>{
         console.log(error);
     }
     res.status(400).send();
+})
+
+adminRouter.post('/deliver',userAuthAdmin, async(req,res)=>{
+    try{
+        console.log(req.user);
+        await DeliverProduct(req.user.id,req.body.orderID);
+        res.send();
+    }
+    catch(error){
+        console.log('Here'+error);
+    }
+    res.status(400).send();
+
 })
 module.exports = adminRouter;

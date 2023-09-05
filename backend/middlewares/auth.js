@@ -31,9 +31,10 @@ const userAuth = (req, res, next) => {
                 next();
             }
         })
-    } else {
-        next();
     } 
+    // else {
+    //     next();
+    // } 
 
 }
 

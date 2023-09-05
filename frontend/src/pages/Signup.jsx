@@ -18,7 +18,7 @@ const Signup = () => {
         area: ''
     });
     const [type, setType] = useState('CUSTOMER');
-    const [city, setCity] = useState('');
+    const [city, setCity] = useState('DHAKA');
     const [zip, setZip] = useState('');
     const [message, setMessage] = useState('');
 
@@ -339,7 +339,7 @@ const Signup = () => {
                                     onClick={() => { navigate('/login') }}
                                     className="btn  btn-link"
                                 >
-                                    Click
+                                    Sign in
                                 </button>
                             </div>
                         </div>

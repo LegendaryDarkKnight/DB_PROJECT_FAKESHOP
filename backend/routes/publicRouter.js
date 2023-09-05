@@ -3,7 +3,7 @@ const express = require('express');
 const publicRouter = express.Router();
 
 const { logIn, signUp } = require('../Database/db-login-api');
-const {getAllProducts, getSingleProduct, getAllCategory} = require('../Database/db-products-api');
+const {getAllProducts, getSingleProduct, getAllCategory, addRating, addReview, getReview} = require('../Database/db-products-api');
 const { getWallet, getUser, walletRechargeRequest } = require('../Database/db-profile-api');
 const { loginUser } = require('../utils/auth-utils');
 const { userAuth } = require('../middlewares/auth');
@@ -78,9 +78,10 @@ publicRouter.get("/getProducts", async (req, res) => {
         res.send(data);
     } catch (error) {
         console.error("Error:", error);
-        res.status(500).send("Internal Server Error");
+        res.status(500).send({"message":"Internal Server Error"});
     }
 });//passed
+
 publicRouter.post("/getSingleProduct", async (req, res) => {
     try {
         const data = await getSingleProduct(req.body.id);
@@ -94,7 +95,6 @@ publicRouter.post("/getSingleProduct", async (req, res) => {
 
 publicRouter.get("/getCategory", async(req,res)=>{
     try{
-
         const data = await getAllCategory();
         console.log(data);
         res.send(data);
@@ -111,6 +111,39 @@ publicRouter.post('/recharge', userAuth, async(req,res)=>{
         res.send();
     } catch (error) {
         
+    }
+    res.status(400).send();
+})
+
+publicRouter.post('/addRating', userAuth, async(req,res)=>{
+    try {
+        await addRating(req.user.id,req.body.productID, req.body.rate);
+        res.send();
+    } catch (error) {
+        console.log(error);
+    }
+    res.status(400).send();
+})
+
+publicRouter.post('/addReview', userAuth, async(req,res)=>{
+    try {
+        await addReview(req.user.id, req.body.productID, req.body.comment.toString());
+        res.send();
+    } catch (error) {
+        console.log(error);
+    }
+    res.status(400).send();
+})
+
+publicRouter.post('/getReview', userAuth, async(req,res)=>{
+    try {
+        console.log('Get Review')
+        console.log(req.body)
+        const data = await getReview(req.body.productID);
+        console.log(data)
+        res.send(data);
+    } catch (error) {
+        console.log(error);
     }
     res.status(400).send();
 })

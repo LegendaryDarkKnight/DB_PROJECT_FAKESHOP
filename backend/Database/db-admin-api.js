@@ -94,11 +94,12 @@ async function getPendingDeliveries(id) {
     };
 
     const ans = await database.execute(
-        `
+    `
     SELECT p2.IMAGE IMAGE,p2.PRODUCT_ID PRODUCT_ID,p2.PRODUCT_NAME PRODUCT_NAME,
     (SELECT SHOP_NAME FROM SHOP WHERE SHOP_ID=u1.USER_ID) SHOP_NAME,
     (u2.FIRST_NAME||' '||u2.LAST_NAME) NAME,u2.CONTACT CONTACT,
-    (u2.CITY) ADDRESS
+    (u2.BUILDING_NUMBER||', '||u2.STREET||', '||u2.AREA||', '||u2.CITY||'-'||u2.POST_CODE) ADDRESS, 
+    c2.ORDER_ID ORDER_ID
     FROM PURCHASED_ORDER p1 
     JOIN CUSTOMER_ORDER c2
     ON p1.ORDER_ID=c2.ORDER_ID
@@ -109,16 +110,32 @@ async function getPendingDeliveries(id) {
     JOIN ALL_USERS u2
     ON u2.USER_ID=c2.CUSTOMER_ID
     WHERE UPPER(p1.DELIVERY_STATUS)='NOT DELIVERED' AND (SELECT c1.CURRENT_CITY FROM COURIER_SERVICE c1 WHERE c1.EMPLOYEE_ID=:id)=u1.CITY
-        `,
-        binds, options);
+    `,
+    binds, options);
     return ans;
 }
-
+async function DeliverProduct(courierID,orderID)
+{
+   const options = {
+        outFormat: database.options.outFormat
+    };
+    const binds = {
+      courierID: courierID,
+        orderID: orderID
+    };
+    const query=`UPDATE PURCHASED_ORDER
+         SET COURIER_SERVICE_ID=:courierID,DELIVERY_DATE=SYSDATE,DELIVERY_STATUS='DELIVERED'
+         WHERE ORDER_ID=:orderID AND DELIVERY_STATUS='NOT DELIVERED'
+         `
+   await database.execute(query, binds, options);
+   
+}
 module.exports = {
     logIn,
     getAdmin,
     getRechargeOrder,
     accept_recharge,
     getAllTransaction,
-    getPendingDeliveries
+    getPendingDeliveries,
+    DeliverProduct
 }
