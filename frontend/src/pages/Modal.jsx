@@ -10,7 +10,6 @@ const MODAL_STYLES = {
   width: '500px',
   height: '520px',
   background: 'transparent',
-  backgroundColor: '#FFF',
   padding: '50px',
   zIndex: 1000,
   marginTop: '0',

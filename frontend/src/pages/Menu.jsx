@@ -119,7 +119,7 @@ export default function Menu() {
                         </div>
                         <ul className="navbar-nav d-flex " >
                             <li className="nav-item" >
-                                <Link className="nav-link" aria-current="page" to={`/`} style={{ color: "white" }}>
+                                <Link className="nav-link" aria-current="page" to={`/search`} style={{ color: "white" }}>
                                     Search Products
                                 </Link>
                             </li>

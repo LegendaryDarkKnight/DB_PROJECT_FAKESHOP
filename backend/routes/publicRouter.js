@@ -3,7 +3,7 @@ const express = require('express');
 const publicRouter = express.Router();
 
 const { logIn, signUp } = require('../Database/db-login-api');
-const {getAllProducts, getSingleProduct, getAllCategory, addRating, addReview, getReview} = require('../Database/db-products-api');
+const {getAllProducts, getSingleProduct, getAllCategory, addRating, addReview, getReview, getBrand, findProduct} = require('../Database/db-products-api');
 const { getWallet, getUser, walletRechargeRequest, sendMessages, getMessages } = require('../Database/db-profile-api');
 const { loginUser } = require('../utils/auth-utils');
 const { userAuth } = require('../middlewares/auth');
@@ -82,6 +82,17 @@ publicRouter.get("/getProducts", async (req, res) => {
     }
 });//passed
 
+publicRouter.get("/getSearchedProducts", async (req, res) => {
+    try {
+        console.log(req.query);
+        const data = await findProduct(req.query.name,req.query.category,req.query.minPrice,req.query.maxPrice,req.query.brand,req.query.sortBy);
+        res.send(data);
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).send({"message":"Internal Server Error"});
+    }
+});
+
 publicRouter.post("/getSingleProduct", async (req, res) => {
     try {
         const data = await getSingleProduct(req.body.id);
@@ -105,6 +116,17 @@ publicRouter.get("/getCategory", async(req,res)=>{
     }
 })
 
+publicRouter.post('/getBrand', async(req,res)=>{
+    try{
+        const data = await getBrand(req.body.category);
+        console.log(data);
+        res.send(data);
+    }
+    catch (error) {
+        console.error("Error:", error);
+        res.status(500).send("Internal Server Error");
+    }
+})
 publicRouter.post('/recharge', userAuth, async(req,res)=>{
     try {
         await walletRechargeRequest(req.user.id,req.body.amount);

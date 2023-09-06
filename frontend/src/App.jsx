@@ -16,6 +16,7 @@ import AdminLogin from './AdminPages/AdminLogin'
 import TransactionTable from './AdminPages/TransactionTable';
 import UserRequest from './AdminPages/Userrequest';
 import PendinDelivery from './AdminPages/PendingDelivery'
+import SearchProducts from './pages/SearchProducts';
 
 export const UserContext = createContext();
 
@@ -36,6 +37,7 @@ const App = () => {
             <Route path='/order/' element={<MyOrder />}></Route>
             <Route path='/myProducts/' element={<MyProducts/>}></Route>
             <Route path='/test/' element={<Test />}></Route>
+            <Route path='/search/' element={<SearchProducts />}></Route>
             <Route path='/myShop/' element={<MyShop />}></Route>
             <Route path='/shopOrder/' element={<ShopOrder/>}></Route>
             <Route path='/admin/' element={<AdminHome/>}></Route>

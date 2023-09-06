@@ -94,6 +94,45 @@ async function getReview(pid) {
         binds, options);
     return ans;
 }
+async function getBrand(category)
+{
+   const options = {
+        outFormat: database.options.outFormat
+    };
+    const binds = {
+      category:category
+    };
+    
+      const ans = await database.execute(
+        `SELECT DISTINCT BRAND
+         FROM PRODUCT
+         WHERE CHECK_CATEGORY(:category,CATEGORY)='TRUE'
+         `, 
+        binds, options);
+    return ans;
+}
+
+async function findProduct(name,category,minPrice,maxPrice,brand,sortingOrder)
+{
+   const options = {
+        outFormat: database.options.outFormat
+    };
+    
+    const binds = {
+      name:name,
+      category:category,
+      minPrice:minPrice,
+      maxPrice:maxPrice,
+      brand:brand
+    };
+    const query = 
+    `SELECT *
+    FROM PRODUCT
+    WHERE CHECK_NAME(:name,PRODUCT_NAME)='TRUE' AND CHECK_CATEGORY(:category,CATEGORY)='TRUE' AND CHECK_BRAND(:brand,BRAND)='TRUE' AND PRICE>=:minPrice AND PRICE<=:maxPrice
+    `+(sortingOrder?sortingOrder:``);
+    const ans = await database.execute( query, binds, options);
+    return ans;
+}
 
 module.exports = {
     getAllProducts,
@@ -101,5 +140,7 @@ module.exports = {
     getAllCategory,
     addRating,
     addReview,
-    getReview
+    getReview,
+    getBrand,
+    findProduct
 };

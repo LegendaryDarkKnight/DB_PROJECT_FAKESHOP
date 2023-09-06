@@ -100,5 +100,72 @@ body {
   }
 }
 /* Products.scss */
+/* Sidebar Styles */
+.sidebar {
+  width: 250px; /* Adjust the width as needed */
+  height: 100%; /* Make the sidebar cover the full height of the content */
+  background-color: #333; /* Background color for the sidebar */
+  color: #fff; /* Text color */
+  position: fixed; /* Fix the sidebar in place */
+  top: 55px; /* Position it at the top below the navigation bar */
+  left: 0; /* Position it on the left side */
+  overflow-y: auto; /* Enable scrolling if the content exceeds the height */
+  z-index: 100; /* Ensure the sidebar is on top of other content */
+}
 
+.sidebar-content {
+  padding: 20px;
+}
+
+h2 {
+  color: #d50000; /* Header text color */
+}
+
+/* Input styles */
+input[type="text"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #444; /* Input background color */
+  color: #fff; /* Input text color */
+}
+
+/* Select styles */
+select {
+  appearance: none; /* Remove default select styles */
+  background-image: url("path-to-your-arrow-icon.svg"); /* Add a custom arrow icon */
+  background-repeat: no-repeat;
+  background-position: right center;
+  padding-right: 30px; /* Add space for the arrow icon */
+}
+
+/* Button styles */
+button.toggle-button {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background-color: #d50000; /* Button background color */
+  color: #fff; /* Button text color */
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+button.toggle-button:hover {
+  background-color: #ff6347; /* Hover background color */
+}
+
+
+.wrapper1 {
+  margin-left: 260px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 16rem));
+  gap: 2rem;
+  justify-content: center; /* Adjust the margin to make room for the sidebar */
+}
 
