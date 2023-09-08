@@ -46,7 +46,7 @@ const OfferForm = (props) => {
   // ... (Same state and input change handler as before)
   const [offerData, setOfferData] = useState({
     offerName: '',
-    validity: 0,
+    validity: 1,
     productID: '', // Initial value is an empty string
     offerType: '',
     amount: 0,
@@ -93,22 +93,27 @@ const OfferForm = (props) => {
   };
 
   // Dummy product options for the dropdown
-  const productOptions = [
-    { id: 'product1', name: 'Product 1' },
-    { id: 'product2', name: 'Product 2' },
-    { id: 'product3', name: 'Product 3' },
-  ];
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     if (
       (offerData.offerType == 'DISCOUNT' && offerData.discRate == 0) ||
       (offerData.offerType != 'DISCOUNT' && (offerData.amount == 0 || offerData.minAmount == 0))
     ) {
       alert('Please fill in the required fields.');
+      return;
     } else {
       alert(JSON.stringify(offerData));
     }
+    const response = await fetch('http://localhost:3000/shop/addOffer',{
+      method: "POST",
+      headers:{
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(offerData),
+      credentials: 'include'
+    });
+
   };
   return (
     <div style={styles.formContainer}>
@@ -204,7 +209,7 @@ const OfferForm = (props) => {
             />
           </div>
           <div style={styles.label} className='col-6'>
-            <label htmlFor="validity">Validity:</label>
+            <label htmlFor="validity">Validity(days):</label>
             <input
               style={styles.input}
               type="number"
@@ -212,7 +217,7 @@ const OfferForm = (props) => {
               name="validity"
               value={offerData.validity}
               onChange={handleInputChange}
-              min = "0"
+              min = "1"
               required
             />
           </div>

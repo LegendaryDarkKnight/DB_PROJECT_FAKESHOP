@@ -108,6 +108,27 @@ async function dispatchProduct( orderID){
     `;
    await database.execute(query,binds,options);
 }
+
+async function addOffer(name,validity,pID,type,value,minValue)
+{
+  const options = {
+        outFormat: database.options.outFormat
+    };
+    const binds = {
+      name:name,
+      validity:validity,
+      pID:pID,
+      type:type,
+      value:value,
+      minValue:minValue
+    };
+    const query=`DECLARE
+           BEGIN
+           ADD_OFFER(:name,:validity,:pID,:type,:value,:minValue);
+           END;`
+    await database.execute(query,binds,options);
+}
+
 module.exports = {
     addProduct,
     removeProduct,
@@ -115,5 +136,6 @@ module.exports = {
     updatePrice,
     updateName,
     getProductsOfShop,
-    dispatchProduct
+    dispatchProduct,
+    addOffer
 }

@@ -1,7 +1,7 @@
 const express = require('express');
 
 const { userAuth } = require('../middlewares/auth');
-const { addProduct, removeProduct, updateStock, updatePrice, updateName, getProductsOfShop, dispatchProduct } = require('../Database/db-shop-api');
+const { addProduct, removeProduct, updateStock, updatePrice, updateName, getProductsOfShop, dispatchProduct, addOffer } = require('../Database/db-shop-api');
 
 const shopRouter = express.Router();
 
@@ -79,5 +79,15 @@ shopRouter.post('/dispatch', async(req,res)=>{
         console.log(error);
     }
     res.status(404).send();
+})
+
+shopRouter.post('/addOffer', async(req,res)=>{
+    try {
+        console.log(req.body);
+        await addOffer(req.body.offerName,req.body.validity,req.body.productID,req.body.offerType,req.body.amount,req.body.minAmount);
+    } catch (error) {
+        console.log(error);
+    }
+    res.send();
 })
 module.exports = shopRouter;

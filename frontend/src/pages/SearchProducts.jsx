@@ -147,7 +147,6 @@ function SearchProducts() {
   };
 
   const handleSubmit= async(e)=>{
-    alert('Clik2')
     await reloadData();
   }
   return (

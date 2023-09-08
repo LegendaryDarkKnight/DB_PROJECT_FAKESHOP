@@ -12,10 +12,10 @@ const main = async () => {
         
         // Extract rows from the result
         const rows = result.rows;
-
+        
         // Write rows to a CSV file
-        const csvFileName = path.join(__dirname, 'wallet.csv');
-        await writeCSVFile(rows, csvFileName);
+        // const csvFileName = path.join(__dirname, 'wallet.csv');
+        // await writeCSVFile(rows, csvFileName);
 
         console.log("Data written to wallet.csv");
     } catch (err) {

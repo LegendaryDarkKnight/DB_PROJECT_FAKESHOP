@@ -197,6 +197,10 @@ const ProductDetailsPage = () => {
             alert('You cannot buy products as shop');
             return;
         }
+        else if(productData.rows[0].STOCK == 0){
+            alert('Out of Stock');
+            return;
+        }
         else {
             const data = { productID: productID, amount: 1, totalPrice: productData.rows[0].PRICE }
             console.log(data);
@@ -242,7 +246,10 @@ const ProductDetailsPage = () => {
                     <div className="col-md-6">
                         <h2>{productData.rows[0].PRODUCT_NAME}</h2>
                         <p>{productData.rows[0].DESCRIPTION}</p>
-                        <h4>Price: {productData.rows[0].PRICE}</h4>
+                        <br/>
+                        <h5>Price: {productData.rows[0].PRICE}</h5>
+                        <br/>
+                        <h5>Stock: {productData.rows[0].STOCK}</h5>
                         <Rating value={productData.rows[0].RATING} />
                         <br/>
                         <br/>

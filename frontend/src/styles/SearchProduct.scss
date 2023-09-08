@@ -101,7 +101,7 @@ body {
 }
 /* Products.scss */
 /* Sidebar Styles */
-.sidebar {
+.sidebar1 {
   width: 250px; /* Adjust the width as needed */
   height: 100%; /* Make the sidebar cover the full height of the content */
   background-color: #333; /* Background color for the sidebar */
@@ -113,7 +113,7 @@ body {
   z-index: 100; /* Ensure the sidebar is on top of other content */
 }
 
-.sidebar-content {
+.sidebar-content1 {
   padding: 20px;
 }
 
@@ -121,10 +121,8 @@ h2 {
   color: #d50000; /* Header text color */
 }
 
-/* Input styles */
-input[type="text"],
-input[type="number"],
-select {
+/* Input styles */ // change here
+.design29 {
   width: 100%;
   padding: 10px;
   margin-top: 10px;
@@ -135,13 +133,7 @@ select {
 }
 
 /* Select styles */
-select {
-  appearance: none; /* Remove default select styles */
-  background-image: url("path-to-your-arrow-icon.svg"); /* Add a custom arrow icon */
-  background-repeat: no-repeat;
-  background-position: right center;
-  padding-right: 30px; /* Add space for the arrow icon */
-}
+
 
 /* Button styles */
 button.toggle-button {

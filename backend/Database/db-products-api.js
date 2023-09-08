@@ -6,10 +6,7 @@ async function getAllProducts() {
     };
     const binds = {
     };
-    const query = `SELECT p.PRODUCT_ID PRODUCT_ID, p.PRODUCT_NAME PRODUCT_NAME, p.CATEGORY CATEGORY,s.SHOP_NAME SHOP_NAME
-                   FROM PRODUCT p JOIN SHOP s
-                   ON p.SHOP_ID = s.SHOP_ID
-                   `;
+
     const ans = await database.execute(`SELECT * FROM PRODUCT WHERE STOCK>0`, binds, options);
     return ans;
 }
@@ -24,7 +21,7 @@ async function getSingleProduct(productID) {
     const query = `SELECT *
                    FROM PRODUCT
                    WHERE PRODUCT_ID = :productID
-                   AND STOCK>0`;
+                   `;
     const ans = await database.execute(query, binds, options);
     return ans;
 }
@@ -128,7 +125,7 @@ async function findProduct(name,category,minPrice,maxPrice,brand,sortingOrder)
     const query = 
     `SELECT *
     FROM PRODUCT
-    WHERE CHECK_NAME(:name,PRODUCT_NAME)='TRUE' AND CHECK_CATEGORY(:category,CATEGORY)='TRUE' AND CHECK_BRAND(:brand,BRAND)='TRUE' AND PRICE>=:minPrice AND PRICE<=:maxPrice
+    WHERE CHECK_NAME(:name,PRODUCT_NAME)='TRUE' AND CHECK_CATEGORY(:category,CATEGORY)='TRUE' AND CHECK_BRAND(:brand,BRAND)='TRUE' AND PRICE>=:minPrice AND PRICE<=:maxPrice AND STOCK>0
     `+(sortingOrder?sortingOrder:``);
     const ans = await database.execute( query, binds, options);
     return ans;

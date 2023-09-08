@@ -1,3 +1,4 @@
+require('dotenv').config();
 const oracledb = require('oracledb')
 
 oracledb.autoCommit = true;
@@ -27,6 +28,7 @@ async function shutdown() {
     } catch(err) {
         console.log("ERROR shutting down database: "+err.message);
     }
+    process.exit(0);
 }
 
 async function execute(sql, binds, options){

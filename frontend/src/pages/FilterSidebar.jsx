@@ -90,8 +90,8 @@ function Sidebar() {
   };
   
   return (
-    <div className='sidebar'>
-      <div className="sidebar-content">
+    <div className='sidebar1'>
+      <div className="sidebar-content1">
       <button className='btn btn-primary mx-5' onClick={handleOnSubmit}>Search</button>
 
         {/* Name Filter */}
@@ -103,11 +103,14 @@ function Sidebar() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             style={{ marginBottom: '10px' }}
+            className='design29'
           />
         </div>
 
         {/* Category Dropdown */}
-        <select onChange={handleCategoryChange} style={{ marginTop: '20px' }}>
+        <select onChange={handleCategoryChange} 
+        style={{ marginTop: '20px' }}
+        className='design29'>
           <option value="">All Categories</option>
           {allCategory && allCategory.map((contents, index) => (
                   <option key={index} value = {contents.CATEGORY}>{contents.CATEGORY}</option>
@@ -125,6 +128,7 @@ function Sidebar() {
         value={minPrice}
         onChange={handleMinPriceChange}
         style={{ marginBottom: '10px' }}
+        className='design29'
       />
       <label htmlFor="maxPrice">Max Price:</label>
       <input
@@ -133,11 +137,13 @@ function Sidebar() {
         placeholder="Max Price"
         value={maxPrice}
         onChange={handleMaxPriceChange}
+        className='design29'
       />
     </div>
 
         {/* Brand Dropdown */}
-        <select onChange={(e) => setBrand(e.target.value)} style={{ marginTop: '20px' }}>
+        <select onChange={(e) => setBrand(e.target.value)} style={{ marginTop: '20px' }}
+        className='design29'>
           <option value="">All Brands</option>
           {allBrands && allBrands.map((contents,index)=>(
             <option key={index} value={contents.BRAND}>{contents.BRAND}</option>
@@ -146,7 +152,8 @@ function Sidebar() {
         </select>
 
         {/* Sort By Dropdown */}
-        <select onChange={(e) => setSortBy(e.target.value)} style={{ marginTop: '20px' }}>
+        <select onChange={(e) => setSortBy(e.target.value)} style={{ marginTop: '20px' }}
+        className='design29'>
           <option value="">Default</option>
           <option value="ORDER BY PRICE ASC">Price: Low to High</option>
           <option value="ORDER BY PRICE DESC">Price: High to Low</option>
