@@ -6,6 +6,13 @@ const MyOrder = () => {
     const [orders, setOrders] = useState([]);
     const [searchText, setSearchText] = useState('');
 
+
+    const formatDate = (dateString) => {
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        const parsedDate = new Date(dateString);
+        return parsedDate.toLocaleDateString(undefined, options);
+    };
+    
     useEffect(() => {
         let isCurrent = true;
 
@@ -22,7 +29,6 @@ const MyOrder = () => {
                 }
             })
             .catch((error) => {
-                // Handle any errors that occur during the fetch request
                 console.error('Error fetching user data:', error);
             })
             .finally(() => {
@@ -32,32 +38,11 @@ const MyOrder = () => {
         return () => {
             isCurrent = false; // Set isCurrent to false when the effect cleanup is performed
         };
-        // You can fetch the data from your backend API here
-        // Example: fetch('/api/orders')
-        //   .then(response => response.json())
-        //   .then(data => setOrders(data));
-
-        // For demonstration, I'll create a sample data structure
-        // const sampleData = [
-        //   {
-        //     PRODUCT_ID: 1,
-        //     PRODUCT_NAME: 'Product 1',
-        //     IMAGE: 'product1.jpg',
-        //     COST: 100.00,
-        //     ORDERED_ON: '01/September/2023',
-        //     DELIVERY_STATUS: 'Delivered',
-        //     DELIVERY_DATE: '05/September/2023',
-        //   },
-        //   // Add more order objects as needed
-        // ];
-
-        // setOrders(sampleData);
+      
     }, []);
 
     const handleReturnOrder = (orderId) => {
-        // Implement the logic to return the order here
-        // Example: send a request to your backend to process the return
-        // and then update the UI accordingly
+
     };
 
     const filteredOrders = orders.filter((order) =>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import  { useState, useEffect, useContext } from 'react';
 import Menu from './Menu';
 import { UserContext } from '../App';
 import MessagingApp
@@ -10,11 +10,7 @@ const messageViewStyle = {
   borderLeft: '1px solid #ccc',
 };
 
-const buttonStyle = {
-  background: 'none',
-  border: 'none',
-  cursor: 'pointer',
-};
+
 const messageListStyle = {
   width: '350px',
   borderRight: '1px solid #ccc',
@@ -22,6 +18,8 @@ const messageListStyle = {
   margin: '0',
   backgroundColor: '#f8f8f8',
   boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.1)',
+  maxHeight: '100vh',
+  overflowY: 'auto',
 };
 
 const messageListHeaderStyle = {
@@ -36,15 +34,19 @@ const messageListItemsStyle = {
   listStyle: 'none',
   padding: '0',
   margin: '0',
-  overflowY: 'auto', // Enable vertical scrolling
-  maxHeight: 'calc(100vh - 56px - 1px)', // Adjust the height as needed
-}
+  overflowY: 'auto',
+};
+
 const messageListItemStyle = {
-  display: 'flex',
-  alignItems: 'center',
-  padding: '12px 16px',
-  cursor: 'pointer',
-  borderBottom: '1px solid #ccc',
+    display: 'flex',
+    alignItems: 'center',
+    padding: '12px 16px',
+    cursor: 'pointer',
+    borderBottom: '1px solid #ccc',
+    transition: 'background-color 0.3s', // Add a transition for smooth effect
+  };
+const messageListItemHoverStyle = {
+    backgroundColor: '#e0e0e0', // Change background color on hover
 };
 
 const messageListItemTextStyle = {
@@ -54,17 +56,22 @@ const messageListItemTextStyle = {
 };
 
 const MessageList = ({ messages, onSelectPerson }) => {
-  return (
-    <>
-
+    const [hoveredIndex, setHoveredIndex] = useState(null);
+  
+    return (
       <div style={messageListStyle}>
         <div style={messageListHeaderStyle}>Chats</div>
         <ul style={messageListItemsStyle}>
           {messages.map((message, index) => (
             <li
               key={index}
-              style={messageListItemStyle}
+              style={{
+                ...messageListItemStyle,
+                ...(hoveredIndex === index ? messageListItemHoverStyle : {}),
+              }}
               onClick={() => onSelectPerson(message.USER_ID)}
+              onMouseEnter={() => setHoveredIndex(index)} // Set hover state
+              onMouseLeave={() => setHoveredIndex(null)}  // Clear hover state
             >
               <div>
                 <img
@@ -82,9 +89,8 @@ const MessageList = ({ messages, onSelectPerson }) => {
           ))}
         </ul>
       </div>
-    </>
-  );
-};
+    );
+  };
 
 const MessageView = (props) => {
 
@@ -110,7 +116,7 @@ const MessageView = (props) => {
 };
 
 
-const App = () => {
+const MyMessages = () => {
   const [selectedPerson, setSelectedPerson] = useState(null);
 
 
@@ -158,4 +164,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default MyMessages;

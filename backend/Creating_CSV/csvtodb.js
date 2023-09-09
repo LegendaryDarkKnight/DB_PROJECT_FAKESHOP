@@ -2,7 +2,7 @@ const fs = require('fs');
 const csvParser = require('csv-parser');
 const path = require('path');
 const database = require('../Database/database');
-
+const bcrypt = require('bcrypt');
 
 async function run(query, outputFormat = database.options.outFormat) {
     const result = await database.execute(query, [], {
@@ -39,8 +39,9 @@ async function updateData(data){
 
         for (const row of data) {
             console.log(row.USER_ID,row.PASS_WORD);
+            const hashedPassword = bcrypt.hashSync(row.PASS_WORD, 10);
             await run(`UPDATE ALL_USERS
-                        SET PASS_WORD = '${row.PASS_WORD}'
+                        SET PASS_WORD = '${hashedPassword}'
                         WHERE USER_ID = '${row.USER_ID}'
                         `);
         }
@@ -59,11 +60,9 @@ async function updateData(data){
 async function readCSVAndInsert() {
     const data = [];
 
-    fs.createReadStream(path.join(__dirname, 'allUsers.csv'))
+    fs.createReadStream(path.join(__dirname, 'all_users.csv'))
         .pipe(csvParser({ delimiter: ',' }))
         .on('data', row => {
-            // console.log('CSV Row:', row);
-            // console.log(typeof row.PRODUCT_ID)
             data.push(row);
         })
         .on('end', async () => {

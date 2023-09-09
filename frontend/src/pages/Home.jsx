@@ -3,38 +3,35 @@ import { UserContext } from '../App';
 import Menu from './Menu';
 
 const Home = () => {
-    const { userData, walletStatus, setWalletStatus } = useContext(UserContext);
+    const { userData } = useContext(UserContext);
     const [editing, setEditing] = useState(false); // Track if editing mode is active
-    const profileImageSource = userData ? "../" + userData.rows[0].IMAGE : "";
+    const profileImageSource = userData ? "../images/" + userData.rows[0].IMAGE : "";
     const [points, setPoints] = useState(0);
     const [editedUserData, setEditedUserData] = useState({}); // Store edited data
     const [reqMoney, setReqMoney] = useState(0)
-    useEffect(() => {
-        reloadWallet();
-    }, [userData, walletStatus]);
 
-    const reloadWallet = async () => {
-        try {
-            const response = await fetch("http://localhost:3000/getWalletStatus", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: 'include',
-            });
+    // const reloadWallet = async () => {
+    //     try {
+    //         const response = await fetch("http://localhost:3000/getWalletStatus", {
+    //             method: "POST",
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //             },
+    //             credentials: 'include',
+    //         });
 
-            if (!response.ok) {
-                console.error("Network response was not ok");
-                return;
-            }
+    //         if (!response.ok) {
+    //             console.error("Network response was not ok");
+    //             return;
+    //         }
 
-            const data = await response.json();
-            console.log(data.rows[0].TOTAL_CREDITS);
-            setWalletStatus(data.rows[0].TOTAL_CREDITS);
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    };
+    //         const data = await response.json();
+    //         console.log(data.rows[0].TOTAL_CREDITS);
+    //         setWalletStatus(data.rows[0].TOTAL_CREDITS);
+    //     } catch (error) {
+    //         console.error("Error:", error);
+    //     }
+    // };
 
     const handleEdit = () => {
         // Set edited data to current user data when entering edit mode
@@ -284,7 +281,7 @@ const Home = () => {
                                                     </div>
                                                     {/* Display other attributes here */}
                                                     <div>
-                                                        <strong>Wallet Status:</strong> {walletStatus}
+                                                        <strong>Wallet Status:</strong> {userData.rows[0].TOTAL_CREDITS}
                                                     </div>
                                                     <button
                                                         className="btn btn-success mt-3"
@@ -302,29 +299,27 @@ const Home = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="col-md-6">
+                    {userData && userData.rows[0].USER_TYPE == 'CUSTOMER' && <div className="col-md-6">
                         <div className="card">
                             <div className="card-header bg-primary text-white">
                                 <h5 className="mb-0">Points</h5>
                             </div>
-                            <div className="card-body">
+                            {userData && <div className="card-body">
                                 <div className="progress mb-3">
                                     <div
                                         className="progress-bar"
                                         role="progressbar"
-                                        style={{ width: `${points}%` }}
-                                        aria-valuenow={points}
+                                        style={{ width: `${userData.rows[0].POINTS}%` }}
+                                        aria-valuenow={userData.rows[0].POINTS}
                                         aria-valuemin="0"
                                         aria-valuemax="100"
                                     >
-                                        {points}%
+                                        {userData.rows[0].POINTS}%
                                     </div>
                                 </div>
-                                <p className="mb-0">Points: {points}</p>
-                            </div>
+                                 <p className="mb-0">Points: {userData.rows[0].POINTS}</p>
+                            </div>}
                         </div>
-
-                        {/* Reviews and Ratings Card */}
                         <div className="card mt-4">
                             <div className="card-header bg-success text-white">
                                 <h5 className="mb-0">Reviews and Ratings</h5>
@@ -361,7 +356,7 @@ const Home = () => {
                                 </div>
                             </form>
                         </div>
-                    </div>
+                    </div>}
                 </div>
             </div>
         </>

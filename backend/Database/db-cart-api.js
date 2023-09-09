@@ -108,11 +108,25 @@ async function updateCartStatus(userID,productID, status){
 
     await database.execute(query,binds,options);
 }
+
+async function getDeliveryCharge(userID){
+    const options = {
+        outFormat: database.options.outFormat
+    };
+    const binds ={
+        userID: userID
+    }
+    const query = 
+    `SELECT DELIVERY_CHARGE(:userID) DELIVERY_CHARGE FROM DUAL`
+    const ans = database.execute(query,binds,options);
+    return ans;
+}
 module.exports = {
     getCart,
     insertCart,
     updateCart,
     removeCart,
     inCart,
-    updateCartStatus
+    updateCartStatus,
+    getDeliveryCharge
 };

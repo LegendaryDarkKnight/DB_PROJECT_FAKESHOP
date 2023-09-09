@@ -9,7 +9,7 @@ orderRouter.use(userAuth);
 orderRouter.post('/place', async(req,res)=>{
     try {
         console.log(req.user.id);
-        await placeOrder(req.user.id);
+        await placeOrder(req.user.id,req.body.deliveryCharge);
         res.status(200).send();
     } catch (error) {
         console.log(error);

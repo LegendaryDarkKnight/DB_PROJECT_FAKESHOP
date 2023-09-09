@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import Menu from './Menu'; // Make sure to adjust the import path
 import '../styles/Cart.scss'
 import Modal from './Modal2';
 import { FaTimes } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-
+import { UserContext } from "../App";
 const CartpropsCard = ({
     image,
     name,
@@ -70,6 +70,8 @@ const Cart = () => {
     const [cartData, setCartData] = useState([]);
     const [checkedItems, setCheckedItems] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
+    const [deliveryCharge, setDeliveryCharge] = useState(0);
+    const { userData } = useContext(UserContext);
     const navigate = useNavigate();
     const fetchCartData = async () => {
         try {
@@ -92,6 +94,25 @@ const Cart = () => {
             console.log('Error fetching cart data:', error);
         }
     };
+    const fetchDeliveryCharge = async () => {
+        try {
+            const response = await fetch(`http://localhost:3000/cart/deliverycharge`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: 'include',
+            });
+
+            if (!response.ok) {
+                console.log('not ok');
+            }
+            const data = await response.json();
+            setDeliveryCharge(data.rows[0].DELIVERY_CHARGE);
+        } catch (error) {
+            console.log('Error fetching cart data:', error);
+        }
+    }
     const updateCart = async (productID, amount, totalPrice) => {
         try {
             const response = await fetch(`http://localhost:3000/cart/update`, {
@@ -149,6 +170,8 @@ const Cart = () => {
 
     useEffect(() => {
         fetchCartData();
+        fetchDeliveryCharge();
+
     }, []);
 
     const handleQuantityChange = async (itemIndex, newQuantity) => {
@@ -157,6 +180,8 @@ const Cart = () => {
         updatedCartData[itemIndex].QUANTITY = newQuantity;
         updatedCartData[itemIndex].TOTAL_PRICE = newQuantity * updatedCartData[itemIndex].PRICE;
         await updateCart(updatedCartData[itemIndex].PRODUCT_ID, updatedCartData[itemIndex].QUANTITY, updatedCartData[itemIndex].TOTAL_PRICE);
+        await fetchDeliveryCharge();
+
         setCartData(updatedCartData);
     };
     const handleRemoveCartItem = async (itemIndex) => {
@@ -164,6 +189,8 @@ const Cart = () => {
         console.log(cartData[itemIndex].PRODUCT_ID);
 
         await removeCart(cartData[itemIndex].PRODUCT_ID);
+        await fetchDeliveryCharge();
+
         setCartData(updatedCartData);
     };
 
@@ -172,6 +199,7 @@ const Cart = () => {
         updatedCartData[index].STATUS = updatedCartData[index].STATUS === 'PICKED' ? 'ADDED' : 'PICKED';
         const updatedCheckedItems = updatedCartData.map(item => item.STATUS === 'PICKED');
         await updateCartStatus(cartData[index].PRODUCT_ID, updatedCartData[index].STATUS);
+        await fetchDeliveryCharge();
         setCartData(updatedCartData);
         setCheckedItems(updatedCheckedItems);
     };
@@ -191,9 +219,18 @@ const Cart = () => {
                 );
             }
             return null;
-        });
+        }
+        );
     };
     const handleConfirmOrder = async () => {
+        if(calculateTotalPrice() + deliveryCharge == 0){
+            alert('No items selected');
+            return;
+        }
+        if (userData.rows[0].TOTAL_CREDITS < calculateTotalPrice() + deliveryCharge) {
+            alert('Not enough Money in wallet');
+            return;
+        }
         const selectedItems = cartData.filter((_, index) => checkedItems[index]);
         setIsOpen(true);
         console.log("Selected Items:", selectedItems);
@@ -205,6 +242,7 @@ const Cart = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
+                body: JSON.stringify({deliveryCharge: deliveryCharge}),
                 credentials: 'include',
             });
             if (response.ok)
@@ -280,9 +318,17 @@ const Cart = () => {
                         {renderSelectedItemsTable()}
                     </tbody>
                 </table>
+                <table className="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Delivary Charge</th>
+                            <th>{deliveryCharge}</th>
+                        </tr>
+                    </thead>
+                </table>
                 <div className="text-center">
                     <h4 className="mb-4">
-                        Total Price: {calculateTotalPrice()} Tk
+                        Total Price: {calculateTotalPrice() + deliveryCharge} Tk
                     </h4>
                     <button className="btn btn-primary btn-lg" onClick={handleConfirmOrder}>
                         Confirm Order
@@ -303,10 +349,18 @@ const Cart = () => {
                                 {renderSelectedItemsTable()}
                             </tbody>
                         </table>
+                        <table className="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Delivery Charge</th>
+                                    <th>{deliveryCharge}</th>
+                                </tr>
+                            </thead>
+                        </table>
                     </div>
                     <div className="text-center">
                         <h4 className="mb-4">
-                            Total Price: {calculateTotalPrice()} Tk
+                            Total Price: {calculateTotalPrice() + deliveryCharge} Tk
                         </h4>
                         <button className="btn btn-primary btn-lg" onClick={handlePurchasedOrder}>
                             Confirm Purchase

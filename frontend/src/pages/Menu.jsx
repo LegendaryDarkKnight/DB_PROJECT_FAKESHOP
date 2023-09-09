@@ -129,9 +129,12 @@ export default function Menu() {
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link" aria-current="page" to={`/`} style={{ color: "white" }}>
+                                {(!userData || (userData.rows[0].USER_TYPE=='CUSTOMER')) &&<Link className="nav-link" aria-current="page" to={`/allShops`} style={{ color: "white" }}>
                                     Shops
-                                </Link>
+                                </Link>}
+                                {(userData && userData.rows[0].USER_TYPE=='SHOP') && <Link className="nav-link" aria-current="page" to={`/myMessages`} style={{ color: "white" }}>
+                                    My Messages
+                                </Link>}
                             </li>
                             {!userData && <li className="nav-item">
                                 <Link className="nav-link" to={`/login`} style={{ color: "white" }}>

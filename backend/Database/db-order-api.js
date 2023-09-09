@@ -1,14 +1,15 @@
 const database = require('./database')
 
-async function placeOrder(customerID){
+async function placeOrder(customerID, deliveryCharge){
     const options = {
         outFormat: database.options.outFormat
     };
     const binds = {
-        customerID: customerID
+        customerID: customerID,
+        deliveryCharge: deliveryCharge
     };
     const query = ` BEGIN
-                        ADD_ORDER(:customerID);
+                        ADD_ORDER(:customerID, :deliveryCharge);
                     END;
                     `
     await database.execute(query,binds,options);

@@ -17,15 +17,14 @@ import TransactionTable from './AdminPages/TransactionTable';
 import UserRequest from './AdminPages/Userrequest';
 import PendinDelivery from './AdminPages/PendingDelivery'
 import SearchProducts from './pages/SearchProducts';
-
+import MyMessages from './pages/MyMessages';
 export const UserContext = createContext();
 
 const App = () => {
   const [userData, setUserData] = useState(null);
-  const [walletStatus, setWalletStatus] = useState('');
   return (
     <>
-      <UserContext.Provider value={{ userData, setUserData, walletStatus, setWalletStatus }}>
+      <UserContext.Provider value={{ userData, setUserData }}>
         <BrowserRouter>
           <Routes>
             <Route path='/' element={<Products />}></Route>
@@ -39,6 +38,7 @@ const App = () => {
             <Route path='/test/' element={<Test />}></Route>
             <Route path='/search/' element={<SearchProducts />}></Route>
             <Route path='/myShop/' element={<MyShop />}></Route>
+            <Route path='/myMessages/' element={<MyMessages />}></Route>
             <Route path='/shopOrder/' element={<ShopOrder/>}></Route>
             <Route path='/admin/' element={<AdminHome/>}></Route>
             <Route path='/admin/login' element={<AdminLogin/>}></Route>

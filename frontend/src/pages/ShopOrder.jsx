@@ -51,7 +51,7 @@ const ShopOrder = () => {
                 return;
             }
             alert('Success');
-            navigate('/shopOrder');
+            window.location.reload();
         } catch (error) {
             console.log(error);
         }

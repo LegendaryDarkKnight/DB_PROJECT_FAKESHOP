@@ -1,10 +1,11 @@
 const express = require('express');
+const bcrypt = require('bcrypt');
 
 const publicRouter = express.Router();
 
 const { logIn, signUp } = require('../Database/db-login-api');
 const {getAllProducts, getSingleProduct, getAllCategory, addRating, addReview, getReview, getBrand, findProduct} = require('../Database/db-products-api');
-const { getWallet, getUser, walletRechargeRequest, sendMessages, getMessages } = require('../Database/db-profile-api');
+const { getWallet, getUser, walletRechargeRequest, sendMessages, getMessages, getMessageList } = require('../Database/db-profile-api');
 const { loginUser } = require('../utils/auth-utils');
 const { userAuth } = require('../middlewares/auth');
 
@@ -19,27 +20,50 @@ publicRouter.post('/signup', async(req,res)=>{
     res.status(400).send();
 });
 
+// publicRouter.post('/login', async (req, res) => {
+//     try {
+//         let results;
+//         results = await logIn(req.body.email.trim());
+//         if (results.rows.length == 0) {
+//             console.log('No  such user');
+//         }
+//         else {
+//             if (req.body.password==results.rows[0].PASS_WORD) {
+//                 loginUser(res, results.rows[0].USER_ID);
+//                 res.json(results);
+//             }
+//             else {
+//                 console.log('No user');
+//             }
+//         }
+//     }
+//     catch (error) {
+//         console.log(error);
+//     }
+//     res.status(401).send();
+// });
 publicRouter.post('/login', async (req, res) => {
     try {
-        let results;
-        results = await logIn(req.body.email.trim());
-        if (results.rows.length == 0) {
-            console.log('No  such user');
-        }
-        else {
-            if (req.body.password==results.rows[0].PASS_WORD) {
+        const { email, password } = req.body;
+        const results = await logIn(email.trim());
+        if (results.rows.length === 0) {
+            console.log('No such user');
+            res.status(401).send('Authentication failed');
+        } else {
+            const storedHashedPassword = results.rows[0].PASS_WORD;
+            const passwordMatch = bcrypt.compareSync(password, storedHashedPassword);
+            if (passwordMatch) {
                 loginUser(res, results.rows[0].USER_ID);
                 res.json(results);
-            }
-            else {
-                console.log('No user');
+            } else {
+                console.log('Password does not match');
+                res.status(401).send('Authentication failed');
             }
         }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(); // Handle the error properly, this is just an example
     }
-    catch (error) {
-        console.log(error);
-    }
-    res.status(401).send();
 });
 
 publicRouter.get('/logout', (req, res) => {
@@ -189,5 +213,14 @@ publicRouter.post('/getMessages',userAuth,async (req,res)=>{
         console.log(error);
     }
     res.status(500).send();
+})
+
+publicRouter.get('/getMessageList', userAuth, async(req,res)=>{
+    try {
+        const data = await getMessageList(req.user.id);
+        res.send(data);
+    } catch (error) {
+        console.log(error);
+    }
 })
 module.exports = publicRouter;

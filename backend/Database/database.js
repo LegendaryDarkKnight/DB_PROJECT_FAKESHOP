@@ -1,5 +1,10 @@
-require('dotenv').config();
+const path = require('path');
+const dotenv = require('dotenv');
 const oracledb = require('oracledb')
+
+const envFilePath = path.join(__dirname, '..', '.env');
+
+const result = dotenv.config({ path: envFilePath });
 
 oracledb.autoCommit = true;
 

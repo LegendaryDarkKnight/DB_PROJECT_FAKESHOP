@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+ import { useState, useEffect } from 'react';
 
 import '../styles/MessagingApp.css'; // Import your CSS file for styling
 
@@ -47,13 +47,7 @@ const MessagingApp = (props) => {
         }
     }
     useEffect(() => {
-        // Simulate initial messages
         fetchData();
-        // const initialMessages = [
-        //     { sender: user1, text: user1 + 'Hello, how are you?' },
-        //     { sender: user2, text: user2 + 'I\'m good, thanks!' },
-        // ];
-        // setMessages(initialMessages);
     }, []);
 
     const sendMessage = async() => {
@@ -66,7 +60,7 @@ const MessagingApp = (props) => {
 
     return (
         <div className="messenger-container">
-            <div className="messenger-header">Messenger</div>
+            <div className="messenger-header">Messages</div>
             <div className="message-container">
                 {messages.map((message, index) => (
                     <div
