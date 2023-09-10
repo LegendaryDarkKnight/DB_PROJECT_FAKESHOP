@@ -84,6 +84,8 @@ shopRouter.post('/dispatch', async(req,res)=>{
 shopRouter.post('/addOffer', async(req,res)=>{
     try {
         console.log(req.body);
+        if(req.body.offerType == 'DISCOUNT')
+            req.body.amount = req.body.discRate;
         await addOffer(req.body.offerName,req.body.validity,req.body.productID,req.body.offerType,req.body.amount,req.body.minAmount);
     } catch (error) {
         console.log(error);

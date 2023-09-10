@@ -71,6 +71,8 @@ const Cart = () => {
     const [checkedItems, setCheckedItems] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const [deliveryCharge, setDeliveryCharge] = useState(0);
+    const [deliveryOffer, setDeliveryOffer] = useState(0);
+    const [priceCut, setPriceCut] = useState(0);
     const { userData } = useContext(UserContext);
     const navigate = useNavigate();
     const fetchCartData = async () => {
@@ -94,6 +96,7 @@ const Cart = () => {
             console.log('Error fetching cart data:', error);
         }
     };
+
     const fetchDeliveryCharge = async () => {
         try {
             const response = await fetch(`http://localhost:3000/cart/deliverycharge`, {
@@ -112,7 +115,48 @@ const Cart = () => {
         } catch (error) {
             console.log('Error fetching cart data:', error);
         }
+    };
+
+    const fetchDeliveryOffer = async () => {
+        try {
+            const response = await fetch(`http://localhost:3000/cart/deliveryoffer`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: 'include',
+            });
+
+            if (!response.ok) {
+                console.log('not ok');
+            }
+            const data = await response.json();
+            setDeliveryOffer(data.rows[0].DELIVERY_OFFER);
+        } catch (error) {
+            console.log('Error fetching cart data:', error);
+        }
     }
+
+    const fetchPriceCut = async () => {
+        try {
+            const response = await fetch(`http://localhost:3000/cart/pricecut`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: 'include',
+            });
+
+            if (!response.ok) {
+                console.log('not ok');
+            }
+            const data = await response.json();
+            setPriceCut(data.rows[0].PRICE_CUT)
+        } catch (error) {
+            console.log('Error fetching cart data:', error);
+        }
+    }
+
     const updateCart = async (productID, amount, totalPrice) => {
         try {
             const response = await fetch(`http://localhost:3000/cart/update`, {
@@ -171,7 +215,8 @@ const Cart = () => {
     useEffect(() => {
         fetchCartData();
         fetchDeliveryCharge();
-
+        fetchDeliveryOffer();
+        fetchPriceCut();
     }, []);
 
     const handleQuantityChange = async (itemIndex, newQuantity) => {
@@ -181,16 +226,15 @@ const Cart = () => {
         updatedCartData[itemIndex].TOTAL_PRICE = newQuantity * updatedCartData[itemIndex].PRICE;
         await updateCart(updatedCartData[itemIndex].PRODUCT_ID, updatedCartData[itemIndex].QUANTITY, updatedCartData[itemIndex].TOTAL_PRICE);
         await fetchDeliveryCharge();
-
+        await fetchPriceCut();
         setCartData(updatedCartData);
     };
     const handleRemoveCartItem = async (itemIndex) => {
         const updatedCartData = cartData.filter((_, index) => index !== itemIndex);
         console.log(cartData[itemIndex].PRODUCT_ID);
-
         await removeCart(cartData[itemIndex].PRODUCT_ID);
         await fetchDeliveryCharge();
-
+        await fetchPriceCut();
         setCartData(updatedCartData);
     };
 
@@ -200,6 +244,7 @@ const Cart = () => {
         const updatedCheckedItems = updatedCartData.map(item => item.STATUS === 'PICKED');
         await updateCartStatus(cartData[index].PRODUCT_ID, updatedCartData[index].STATUS);
         await fetchDeliveryCharge();
+        await fetchPriceCut();
         setCartData(updatedCartData);
         setCheckedItems(updatedCheckedItems);
     };
@@ -223,7 +268,7 @@ const Cart = () => {
         );
     };
     const handleConfirmOrder = async () => {
-        if(calculateTotalPrice() + deliveryCharge == 0){
+        if (calculateTotalPrice() + deliveryCharge == 0) {
             alert('No items selected');
             return;
         }
@@ -242,7 +287,7 @@ const Cart = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({deliveryCharge: deliveryCharge}),
+                body: JSON.stringify({ deliveryCharge: deliveryCharge }),
                 credentials: 'include',
             });
             if (response.ok)
@@ -318,17 +363,28 @@ const Cart = () => {
                         {renderSelectedItemsTable()}
                     </tbody>
                 </table>
-                <table className="table table-striped">
+                {priceCut !== 0 && (
+                    <table className="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Reduced Price</th>
+                                <th style={{ textAlign: 'right' }}>{priceCut.toFixed(1)}</th>
+                            </tr>
+                        </thead>
+                    </table>
+                )}
+                {deliveryOffer != 0 && <table className="table table-striped">
                     <thead>
                         <tr>
                             <th>Delivary Charge</th>
-                            <th>{deliveryCharge}</th>
+                            <th style={{ textAlign: 'right' }}>{deliveryCharge.toFixed(1)}</th>
                         </tr>
                     </thead>
-                </table>
+                </table>}
                 <div className="text-center">
+                    {deliveryOffer && <p style={{ color: 'red' }}>You have Delivery Offer for Every Delivery upto <strong style={{ color: 'blue' }}>{deliveryOffer}</strong> %</p>}
                     <h4 className="mb-4">
-                        Total Price: {calculateTotalPrice() + deliveryCharge} Tk
+                        Total Price: {calculateTotalPrice() + deliveryCharge - priceCut} Tk
                     </h4>
                     <button className="btn btn-primary btn-lg" onClick={handleConfirmOrder}>
                         Confirm Order
@@ -349,27 +405,34 @@ const Cart = () => {
                                 {renderSelectedItemsTable()}
                             </tbody>
                         </table>
-                        <table className="table table-striped">
+                        {priceCut !== 0 && (
+                            <table className="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Reduced Price</th>
+                                        <th style={{ textAlign: 'right' }}>{priceCut.toFixed(1)}</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        )}
+                        {deliveryOffer != 0 && <table className="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>Delivery Charge</th>
-                                    <th>{deliveryCharge}</th>
+                                    <th>Delivary Charge</th>
+                                    <th style={{ textAlign: 'right' }}>{deliveryCharge.toFixed(1)}</th>
                                 </tr>
                             </thead>
-                        </table>
+                        </table>}
                     </div>
                     <div className="text-center">
                         <h4 className="mb-4">
-                            Total Price: {calculateTotalPrice() + deliveryCharge} Tk
+                            Total Price: {calculateTotalPrice() + deliveryCharge - priceCut} Tk
                         </h4>
                         <button className="btn btn-primary btn-lg" onClick={handlePurchasedOrder}>
                             Confirm Purchase
                         </button>
                     </div>
                 </div>
-
-
-
             </Modal>
             <br />
             <br />

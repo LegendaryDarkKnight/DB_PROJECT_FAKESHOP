@@ -113,7 +113,13 @@ const OfferForm = (props) => {
       body: JSON.stringify(offerData),
       credentials: 'include'
     });
-
+    if(!response.ok){
+      alert('problem');
+    }
+    else{
+      alert('Successful');
+    }
+    window.location.reload();
   };
   return (
     <div style={styles.formContainer}>
@@ -163,7 +169,6 @@ const OfferForm = (props) => {
               <option value="">SELECT TYPE</option>
               <option value="DISCOUNT">DISCOUNT</option>
               <option value="MONEY_CUT">MONEY_CUT</option>
-              <option value="DELIVERY_OFFER">DELIVERY_OFFER</option>
             </select>
           </div>
         </div>

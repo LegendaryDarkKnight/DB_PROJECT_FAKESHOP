@@ -58,12 +58,19 @@ const MyOrder = () => {
                 <div className='row'>
                     <div className='col-md-9' style={{display:"flex", justifyContent:"center", fontSize: '30px'}}><strong>My Orders</strong></div>
                     <div className='col-md-3'>
-                        <input
+                        {/* <input
                             type="text"
                             placeholder="My Order"
                             value={searchText}
                             onChange={(e) => setSearchText(e.target.value)}
                         />
+                         */}
+                         <select>
+                            <option>Default</option>
+                            <option>Delivered</option>
+                            <option>Not Delivered</option>
+                            <option>Not Dispatched</option>
+                         </select>
                     </div>
                 </div>
                 <br/>

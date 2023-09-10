@@ -18,6 +18,8 @@ import UserRequest from './AdminPages/Userrequest';
 import PendinDelivery from './AdminPages/PendingDelivery'
 import SearchProducts from './pages/SearchProducts';
 import MyMessages from './pages/MyMessages';
+import AllShop from './pages/AllShop';
+
 export const UserContext = createContext();
 
 const App = () => {
@@ -31,6 +33,7 @@ const App = () => {
             <Route path='/login' element={<LogIn />}></Route>
             <Route path='/signup' element={<Signup />}></Route>
             <Route path='/home/' element={<Home />}></Route>
+            <Route path='/allShops/' element={<AllShop />}></Route>
             <Route path='/details/:productID' element={<Details />}></Route>
             <Route path='/cart/' element={<Cart />}></Route>
             <Route path='/order/' element={<MyOrder />}></Route>

@@ -121,6 +121,34 @@ async function getDeliveryCharge(userID){
     const ans = database.execute(query,binds,options);
     return ans;
 }
+
+async function getDeliveryOffer(userID){
+    const options = {
+        outFormat: database.options.outFormat
+    };
+    const binds ={
+        userID: userID
+    }
+    const query = 
+    `SELECT FIND_DELIVERY_OFFER(:userID) DELIVERY_OFFER FROM DUAL`
+    const ans = database.execute(query,binds,options);
+    return ans;
+}
+
+async function getPriceCut(userID){
+    const options = {
+        outFormat: database.options.outFormat
+    };
+    const binds ={
+        userID: userID
+    }
+    const query =
+    `
+    SELECT CALCULATE_OFFER(:userID) PRICE_CUT FROM DUAL
+    `
+    const ans = database.execute(query,binds,options);
+    return ans;
+}
 module.exports = {
     getCart,
     insertCart,
@@ -128,5 +156,7 @@ module.exports = {
     removeCart,
     inCart,
     updateCartStatus,
-    getDeliveryCharge
+    getDeliveryCharge,
+    getDeliveryOffer,
+    getPriceCut
 };

@@ -1,5 +1,5 @@
 const express = require('express');
-const { insertCart, getCart , updateCart, removeCart, inCart, updateCartStatus, getDeliveryCharge} = require('../Database/db-cart-api');
+const { insertCart, getCart , updateCart, removeCart, inCart, updateCartStatus, getDeliveryCharge, getDeliveryOffer, getPriceCut} = require('../Database/db-cart-api');
 const { userAuth } = require('../middlewares/auth');
 
 const cartRouter = express.Router();
@@ -100,6 +100,26 @@ cartRouter.get('/deliverycharge', async(req,res)=>{
         res.send(data);
     } catch (error) {
         console.log(error)
+    }
+    res.status(400).send();
+})
+
+cartRouter.get('/deliveryoffer', async(req,res)=>{
+    try {
+        const data = await getDeliveryOffer(req.user.id);
+        res.send(data);
+    } catch (error) {
+        console.log(error)    
+    }
+    res.status(400).send();
+})
+
+cartRouter.get('/pricecut', async(req,res)=>{
+    try {
+        const data = await getPriceCut(req.user.id);
+        res.send(data);
+    } catch (error) {
+        console.log(error)    
     }
     res.status(400).send();
 })
