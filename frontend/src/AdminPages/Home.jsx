@@ -1,5 +1,6 @@
 import Sidebar from './Sidebar'
 import LoginHistory from './LoginHistory'
+import LoginChart from './LoginChart'
 
 const Home = () => {
     return (
@@ -7,7 +8,7 @@ const Home = () => {
             <div className="container-fluid">
                 <div className="row flex-nowrap">
                     <Sidebar></Sidebar>
-                    <LoginHistory/>
+                    <LoginChart/>
                 </div>
             </div>
         </>

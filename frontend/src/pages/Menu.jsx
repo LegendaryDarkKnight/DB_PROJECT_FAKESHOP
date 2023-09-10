@@ -43,39 +43,8 @@ export default function Menu() {
     }
     useEffect(() => {
         reloadUserData();
-        // let isCurrent = true;
-
-        // fetch(`http://localhost:3000/getUserData`, {
-        //     method: "GET",
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //     },
-        //     credentials: 'include',
-        // }).then(res => res.json())
-        //     .then((data) => {
-        //         if (isCurrent) {
-        //             setUserData(data);
-        //         }
-        //     })
-        //     .catch((error) => {
-        //         // Handle any errors that occur during the fetch request
-        //         console.error('Error fetching user data:', error);
-        //     })
-        //     .finally(() => {
-        //         isCurrent = false; // Make sure to set isCurrent to false in the finally block
-        //     });
-
-        // return () => {
-        //     isCurrent = false; // Set isCurrent to false when the effect cleanup is performed
-        // };
-        // // reloadUserData();
-        // // console.log(userData.rows[0].USER_TYPE)
     }, [])
     const handleLogout = async () => {
-        // Perform any additional logout actions here
-        // For example, clearing local storage, sending API requests, etc.
-
-
         try {
             const response = await fetch(`http://localhost:3000/logout`, {
                 method: "GET",
@@ -129,9 +98,6 @@ export default function Menu() {
                                 </Link>
                             </li>
                             <li className="nav-item">
-                                {(!userData || (userData.rows[0].USER_TYPE=='CUSTOMER')) &&<Link className="nav-link" aria-current="page" to={`/allShops`} style={{ color: "white" }}>
-                                    Shops
-                                </Link>}
                                 {(userData && userData.rows[0].USER_TYPE=='SHOP') && <Link className="nav-link" aria-current="page" to={`/myMessages`} style={{ color: "white" }}>
                                     My Messages
                                 </Link>}
@@ -142,15 +108,6 @@ export default function Menu() {
                                 </Link>
                             </li>}
                             {userData && userData.rows[0].USER_TYPE == 'CUSTOMER' && <li className="nav-item dropdown">
-                                {/* <Link
-                                    className="nav-link dropdown-toggle"
-                                    to={`/`}
-                                    role="button"
-                                    data-bs-toggle="dropdown"
-                                    aria-expanded="false"
-                                >
-                                    {userData.rows[0].EMAIL_ID}
-                                </Link> */}
                                 <NavLink to='/'>{userData.rows[0].EMAIL_ID}</NavLink>
                                 <ul className="dropdown-menu">
                                     <li>
@@ -161,6 +118,11 @@ export default function Menu() {
                                     <li>
                                         <Link className="dropdown-item" to={`/order`}>
                                             My Orders
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link className="dropdown-item" to={`/returnOrder`}>
+                                            Returned Orders
                                         </Link>
                                     </li>
                                     <li>
@@ -180,15 +142,6 @@ export default function Menu() {
                             </li>}
                             {/*  */}
                             {userData && userData.rows[0].USER_TYPE == 'SHOP' && <li className="nav-item dropdown">
-                                {/* <Link
-                                    className="nav-link dropdown-toggle"
-                                    to={`/`}
-                                    role="button"
-                                    data-bs-toggle="dropdown"
-                                    aria-expanded="false"
-                                >
-                                    {userData.rows[0].EMAIL_ID}
-                                </Link> */}
                                 <NavLink to='/'>{userData.rows[0].EMAIL_ID}</NavLink>
                                 <ul className="dropdown-menu">
                                     <li>

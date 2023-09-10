@@ -31,7 +31,9 @@ const LoginChart = () => {
 
   return (
     <div>
+        <br/>
       <h2>Login Count Over Time</h2>
+         <br/>   
       <LineChart width={800} height={400} data={data} margin={{ top: 20, right: 30, left: 20, bottom: 10 }}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="LOGIN_DATE" />

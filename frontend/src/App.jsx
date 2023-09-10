@@ -19,7 +19,9 @@ import PendinDelivery from './AdminPages/PendingDelivery'
 import SearchProducts from './pages/SearchProducts';
 import MyMessages from './pages/MyMessages';
 import AllShop from './pages/AllShop';
-
+import PendingReturn from './AdminPages/PendingReturn'
+import ReturnOrder from './pages/ReturnOrder';
+import LoginHistory from './AdminPages/LoginHistory';
 export const UserContext = createContext();
 
 const App = () => {
@@ -37,6 +39,7 @@ const App = () => {
             <Route path='/details/:productID' element={<Details />}></Route>
             <Route path='/cart/' element={<Cart />}></Route>
             <Route path='/order/' element={<MyOrder />}></Route>
+            <Route path='/returnOrder/' element={<ReturnOrder/>}></Route>
             <Route path='/myProducts/' element={<MyProducts/>}></Route>
             <Route path='/test/' element={<Test />}></Route>
             <Route path='/search/' element={<SearchProducts />}></Route>
@@ -48,6 +51,8 @@ const App = () => {
             <Route path='/admin/transaction' element={<TransactionTable/>}></Route>
             <Route path='/admin/userrequests' element={<UserRequest/>}></Route>
             <Route path='/admin/courier-service' element={<PendinDelivery/>}></Route>
+            <Route path='/admin/customer-care' element={<PendingReturn/>}></Route>
+            <Route path='/admin/loginhistory' element={<LoginHistory/>}></Route>
           </Routes>
         </BrowserRouter>
       </UserContext.Provider>

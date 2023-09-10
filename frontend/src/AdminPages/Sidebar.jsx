@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { BsSpeedometer2, BsPeople, BsPerson, BsGear, BsBoxArrowRight, BsClockHistory } from 'react-icons/bs'; // Import React Bootstrap icons
 // Import LoginHistory component
@@ -88,13 +88,8 @@ const Sidebar = () => {
                                 <div className="d-flex align-items-center">
                                     <span className="ms-1 d-none d-sm-inline">Add Customer Care</span>
                                 </div>
-                            </Link>
+                                </Link>
                             <br />
-                            <Link to="/admin/add-courier-service" className="nav-link px-0">
-                                <div className="d-flex align-items-center">
-                                    <span className="ms-1 d-none d-sm-inline">Add Courier Service</span>
-                                </div>
-                            </Link>
                             <hr />
                         </>
                     )}
@@ -130,16 +125,6 @@ const Sidebar = () => {
                                 <span className="d-none d-sm-inline mx-1">{userData[0].EMAIL_ID}</span>
                             </a>
                             <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
-                                <li>
-                                    <Link className="dropdown-item" to="/admin/new-project">
-                                        <BsBoxArrowRight /> New project...
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link className="dropdown-item" to="/admin/settings">
-                                        <BsGear /> Settings
-                                    </Link>
-                                </li>
                                 <li>
                                     <Link className="dropdown-item" to="/admin/profile">
                                         <BsPerson /> Profile

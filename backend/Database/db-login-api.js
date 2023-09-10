@@ -47,7 +47,6 @@ async function logIn(email) {
 //     }
 // }
 
-
 async function signUp(pack) {
     const options = {
         outFormat: database.options.outFormat
@@ -80,7 +79,38 @@ async function signUp(pack) {
     }
 }
 
+async function loginLogTable(uid)
+{
+  const options = {
+        outFormat: database.options.outFormat
+    };
+    const binds = {
+      userID:uid
+    };
+    const query=`INSERT INTO LOG_TABLE(USER_ID,LOG_IN_TIME)
+          VALUES(:userID,SYSDATE)
+          `
+    await database.execute(query,binds,options);
+}
+
+async function logoutLogTable(uid)
+{
+  const options = {
+        outFormat: database.options.outFormat
+    };
+    const binds = {
+      userID:uid
+    };
+    const query=`UPDATE LOG_TABLE
+          SET LOG_OUT_TIME=SYSDATE
+          WHERE USER_ID=:userID AND LOG_OUT_TIME IS NULL
+          `
+    await database.execute(query,binds,options);
+}
+
 module.exports = {
     logIn,
-    signUp
+    signUp,
+    loginLogTable,
+    logoutLogTable
 }

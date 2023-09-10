@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 
 const publicRouter = express.Router();
 
-const { logIn, signUp } = require('../Database/db-login-api');
+const { logIn, signUp, loginLogTable, logoutLogTable } = require('../Database/db-login-api');
 const {getAllProducts, getSingleProduct, getAllCategory, addRating, addReview, getReview, getBrand, findProduct} = require('../Database/db-products-api');
 const { getWallet, getUser, walletRechargeRequest, sendMessages, getMessages, getMessageList } = require('../Database/db-profile-api');
 const { loginUser } = require('../utils/auth-utils');
@@ -54,6 +54,7 @@ publicRouter.post('/login', async (req, res) => {
             const passwordMatch = bcrypt.compareSync(password, storedHashedPassword);
             if (passwordMatch) {
                 loginUser(res, results.rows[0].USER_ID);
+                loginLogTable(results.rows[0].USER_ID);
                 res.json(results);
             } else {
                 console.log('Password does not match');
@@ -66,7 +67,8 @@ publicRouter.post('/login', async (req, res) => {
     }
 });
 
-publicRouter.get('/logout', (req, res) => {
+publicRouter.get('/logout', userAuth,(req, res) => {
+    logoutLogTable(req.user.id);
     res.clearCookie('sessionToken');
     console.log('cleared');
     res.json({ message: 'Logout successful' });

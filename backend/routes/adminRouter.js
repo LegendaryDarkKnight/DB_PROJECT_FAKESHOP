@@ -1,5 +1,5 @@
 const express = require('express');
-const { logIn, getAdmin, getAllTransaction, getRechargeOrder, accept_recharge, getPendingDeliveries, DeliverProduct } = require('../Database/db-admin-api');
+const { logIn, getAdmin, getAllTransaction, getRechargeOrder, accept_recharge, getPendingDeliveries, DeliverProduct, getPendingReturns, refuseReturnOrder, approveReturnOrder, recentLogin, loginHistory } = require('../Database/db-admin-api');
 const { loginAdmin } = require('../utils/auth-utils');
 const { userAuthAdmin } = require('../middlewares/auth');
 
@@ -46,9 +46,7 @@ adminRouter.get('/logout', (req,res) =>{
 
 adminRouter.get('/getTransactions',userAuthAdmin, async(req,res)=>{
     try {
-        console.log('kkk1');
         const data = await getAllTransaction();
-
         res.send(data);
     } catch (error) {
         console.log('Not dound');
@@ -58,9 +56,7 @@ adminRouter.get('/getTransactions',userAuthAdmin, async(req,res)=>{
 
 adminRouter.get('/getRechargeOrder', userAuthAdmin, async(req,res)=>{
     try {
-        console.log('kkk');
         const data = await getRechargeOrder();
-        console.log(data);
         res.send(data);
     } catch (error) {
         
@@ -70,7 +66,6 @@ adminRouter.get('/getRechargeOrder', userAuthAdmin, async(req,res)=>{
 
 adminRouter.post('/acceptrecharge', userAuthAdmin, async(req,res)=>{
     try {
-        console.log(req.body)
         await accept_recharge(req.body.id);
         res.send();
     } catch (error) {
@@ -90,7 +85,6 @@ adminRouter.get('/pendingDelivery', userAuthAdmin, async(req,res)=>{
 
 adminRouter.post('/deliver',userAuthAdmin, async(req,res)=>{
     try{
-        console.log(req.user);
         await DeliverProduct(req.user.id,req.body.orderID);
         res.send();
     }
@@ -99,5 +93,58 @@ adminRouter.post('/deliver',userAuthAdmin, async(req,res)=>{
     }
     res.status(400).send();
 
+})
+
+adminRouter.get('/pendingReturn', userAuthAdmin, async(req,res)=>{
+    try{
+        const data = await getPendingReturns();
+        res.send(data);
+    }
+    catch(error){
+        console.log(error);
+    }
+    res.status(400).send();
+})
+
+adminRouter.post('/refuseReturn', userAuthAdmin, async(req,res)=>{
+    try {
+
+        await refuseReturnOrder(req.body.orderID);
+        res.send();
+    } catch (error) {
+        console.log(error);
+    }
+    res.status(400).send();
+})
+
+adminRouter.post('/approveReturn', userAuthAdmin, async(req,res)=>{
+    try {
+        await approveReturnOrder(req.body.orderID,req.user.id);
+        res.send();
+    } catch (error) {
+        console.log(error);
+    }
+    res.status(400).send();
+})
+
+adminRouter.get('/dailylogin', async(req,res)=>{
+    try{
+        const data = await recentLogin();
+        res.send(data);
+    }
+    catch(err){
+        console.log(err);
+    }
+    res.status(400).send();
+})
+
+adminRouter.get('/loginhistory', async(req,res)=>{
+    try {
+        const data = await loginHistory();
+        res.send(data);
+    } catch (error) {
+        console.log(error);
+    }
+    res.status(400).send();
 })
 module.exports = adminRouter;

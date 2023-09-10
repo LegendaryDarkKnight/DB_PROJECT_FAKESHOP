@@ -130,6 +130,86 @@ async function DeliverProduct(courierID,orderID)
    await database.execute(query, binds, options);
    
 }
+
+async function getPendingReturns(){
+    const options = {
+        outFormat: database.options.outFormat
+    };
+    const binds = {
+
+    };
+    const query = 
+    `
+    SELECT PRODUCT_ID, NAME, PRODUCT_NAME, SHOP_NAME, ORDER_ID, COMPLAINT
+    FROM RETURN_ORDER_SHOP
+    WHERE APPROVAL_STATUS = 'PENDING'
+    `
+    const ans = await database.execute(query,binds,options);
+    return ans;
+
+}
+async function approveReturnOrder(oID,cID)
+{
+  const options = {
+        outFormat: database.options.outFormat
+    };
+    const binds = {
+      oID:oID,
+      cID:cID
+    };
+    const query=`DECLARE
+           BEGIN
+           APPROVE_RETURN_ORDER(:oID,:cID);
+           END;`
+     await database.execute(query,binds,options);  
+}
+
+async function refuseReturnOrder(oID)
+{
+  const options = {
+        outFormat: database.options.outFormat
+    };
+    const binds = {
+      oID:oID
+    };
+    const query=`DECLARE
+           BEGIN
+           REFUSE_RETURN_ORDER(:oID);
+           END;`
+    await database.execute(query,binds,options);
+}
+
+async function recentLogin()
+{
+  const options = {
+        outFormat: database.options.outFormat
+    };
+    const binds = {};
+    const query=`SELECT TO_CHAR(LOG_IN_TIME,'YYYY-MM-DD') LOGIN_DATE,COUNT(*) LOGIN_COUNT
+          FROM LOG_TABLE
+          WHERE LOG_IN_TIME>=(SYSDATE-7)
+          GROUP BY TO_CHAR(LOG_IN_TIME,'YYYY-MM-DD')
+          ORDER BY TO_DATE(TO_CHAR(LOG_IN_TIME,'YYYY-MM-DD'),'YYYY-MM-DD')
+           `
+    const ans=await database.execute(query,binds,options);
+    return ans;
+}
+async function loginHistory()
+{
+  const options = {
+        outFormat: database.options.outFormat
+    };
+    const binds = {};
+    const query=
+    `
+    SELECT a.EMAIL_ID EMAIL, TO_CHAR(l.LOG_IN_TIME, 'ddth Month,YYYY') LOG_IN_TIME, TO_CHAR(l.LOG_OUT_TIME, 'ddth Month,YYYY') LOG_OUT_TIME  
+    FROM LOG_TABLE l JOIN ALL_USERS a
+    ON l.USER_ID = a.USER_ID
+    `
+    const ans=await database.execute(query,binds,options);
+    return ans;
+}
+
 module.exports = {
     logIn,
     getAdmin,
@@ -137,5 +217,10 @@ module.exports = {
     accept_recharge,
     getAllTransaction,
     getPendingDeliveries,
-    DeliverProduct
+    DeliverProduct,
+    approveReturnOrder,
+    refuseReturnOrder,
+    getPendingReturns,
+    recentLogin,
+    loginHistory
 }
