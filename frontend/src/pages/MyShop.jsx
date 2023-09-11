@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import Sidebar from './Sidebar';
 import AddProductModal from './AddProductModal';
 import '../styles/MyShop.css'
@@ -6,11 +6,28 @@ import Menu from './Menu';
 import OfferForm from './OfferForm';
 
 const MyShop = () => {
-  const [shopName, setShopName] = useState('My Shop');
-  const [website, setWebsite] = useState('https://example.com');
+  const [shopName, setShopName] = useState('');
+  const [website, setWebsite] = useState('');
   const [showAddProductModal, setShowAddProductModal] = useState(false);
   const [showOfferForm, setshowOfferForm] = useState(false);
-
+  useEffect(() => {
+    fetch('http://localhost:3000/shop/info', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                setShopName(data.rows[0].SHOP_NAME);
+                setWebsite(data.rows[0].WEBSITE)
+            })
+            .catch((error) => {
+                console.error('Error fetching recent login history:', error);
+            });
+  }, [])
+  
   const [productFormData, setProductFormData] = useState({
     category: '',
     description: '',
@@ -46,6 +63,7 @@ const MyShop = () => {
       if (response.ok) {
         console.log('Product Added');
         alert('Success')
+        window.location.reload();
       }
       else
         console.log('trouble')
@@ -104,8 +122,8 @@ const MyShop = () => {
           <div className="col-md-8">
             <div className="profile-section p-4 bg-light">
               <h1>Profile</h1>
-              <p>Shop Name: {shopName}</p>
-              <p>Website: {website}</p>
+              <p><strong>Shop Name:</strong> {shopName}</p>
+              <p> <strong>Website:</strong> {website}</p>
             </div>
           </div>
           <div className="col-md-4">

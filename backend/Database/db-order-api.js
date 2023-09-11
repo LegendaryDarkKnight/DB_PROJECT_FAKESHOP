@@ -111,7 +111,6 @@ async function getReturnOrders(customerID){
     FROM RETURN_ORDER_SHOP
     WHERE CUSTOMER_ID = :customerID
     `
-
     return await database.execute(query,binds,options); 
 }
 

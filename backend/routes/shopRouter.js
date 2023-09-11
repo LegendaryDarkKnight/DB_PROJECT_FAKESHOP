@@ -1,12 +1,21 @@
 const express = require('express');
 
 const { userAuth } = require('../middlewares/auth');
-const { addProduct, removeProduct, updateStock, updatePrice, updateName, getProductsOfShop, dispatchProduct, addOffer } = require('../Database/db-shop-api');
+const { addProduct, removeProduct, updateStock, updatePrice, updateName, getProductsOfShop, dispatchProduct, addOffer, getShopInfo } = require('../Database/db-shop-api');
 
 const shopRouter = express.Router();
 
 shopRouter.use(userAuth);
 
+shopRouter.get('/info', async(req,res)=>{
+    try {
+        const data = await getShopInfo(req.user.id);
+        res.send(data);
+    } catch (error) {
+        console.log(error);
+    }
+    res.status(400).send();
+})
 shopRouter.get('/getProducts', async(req,res)=>{
     try {
         console.log(req.user.id);

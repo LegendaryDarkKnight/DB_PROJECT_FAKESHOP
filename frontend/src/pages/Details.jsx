@@ -254,7 +254,7 @@ const ProductDetailsPage = () => {
                         <br/>
                         <br/>
                         <button className="btn btn-primary" style={{ backgroundColor: 'orange', border: 'none' }} onClick={handleAddToCart}><FiShoppingCart /> Add to Cart</button>
-                        <button className="btn btn-primary mx-5" style={{ backgroundColor: 'red', border: 'none' }} onClick={()=>{setIsOpen(true)}}>Ask About Product</button>
+                        <button className="btn btn-primary mx-5" style={{ backgroundColor: 'red', border: 'none' }} onClick={()=>{if(userData)setIsOpen(true); else alert('Login First')}}>Ask About Product</button>
                     </div>
                 </div>
                 <div className="sticky-top">

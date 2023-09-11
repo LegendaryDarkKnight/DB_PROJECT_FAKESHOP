@@ -1,5 +1,19 @@
 const database = require('./database')
 
+async function getShopInfo(shopID){
+    const options = {
+        outFormat: database.options.outFormat
+    };
+    const binds ={
+        shopID : shopID
+    }
+    return await database.execute(
+    `SELECT *
+    FROM SHOP
+    WHERE SHOP_ID = :shopID
+    `    
+    , binds, options);
+}
 async function addProduct(pack, shopID){
     const options = {
         outFormat: database.options.outFormat
@@ -129,7 +143,9 @@ async function addOffer(name,validity,pID,type,value,minValue)
     await database.execute(query,binds,options);
 }
 
+
 module.exports = {
+    getShopInfo,
     addProduct,
     removeProduct,
     updateStock,

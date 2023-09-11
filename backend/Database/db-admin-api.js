@@ -210,6 +210,22 @@ async function loginHistory()
     return ans;
 }
 
+async function getSomeData(){
+    const options = {
+        outFormat: database.options.outFormat
+    };
+    const binds = {};
+    const query =
+    `
+    SELECT 
+(SELECT COUNT(*) FROM PRODUCT) TOTAL_PRODUCTS,
+(SELECT COUNT(*) FROM ALL_USERS) TOTAL_USERS,
+(SELECT COUNT(*) FROM SHOP) TOTAL_SHOPS
+FROM DUAL
+    `
+    return await database.execute(query,binds,options);
+}
+
 module.exports = {
     logIn,
     getAdmin,
@@ -222,5 +238,6 @@ module.exports = {
     refuseReturnOrder,
     getPendingReturns,
     recentLogin,
-    loginHistory
+    loginHistory,
+    getSomeData
 }

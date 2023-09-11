@@ -1,5 +1,5 @@
 const express = require('express');
-const { logIn, getAdmin, getAllTransaction, getRechargeOrder, accept_recharge, getPendingDeliveries, DeliverProduct, getPendingReturns, refuseReturnOrder, approveReturnOrder, recentLogin, loginHistory } = require('../Database/db-admin-api');
+const { logIn, getAdmin, getAllTransaction, getRechargeOrder, accept_recharge, getPendingDeliveries, DeliverProduct, getPendingReturns, refuseReturnOrder, approveReturnOrder, recentLogin, loginHistory, getSomeData } = require('../Database/db-admin-api');
 const { loginAdmin } = require('../utils/auth-utils');
 const { userAuthAdmin } = require('../middlewares/auth');
 
@@ -39,11 +39,20 @@ adminRouter.post('/login',async (req,res)=>{
     res.status(401).send();
 });
 
-adminRouter.get('/logout', (req,res) =>{
+adminRouter.get('/logout', async(req,res) =>{
     res.clearCookie('adminSessionToken');
     res.json({ message: 'Logout successful' });
 });
 
+adminRouter.get('/somedata', async(req,res)=>{
+    try {
+        const data = await getSomeData();
+        res.send(data)
+    } catch (error) {
+        console.log(error)
+    }
+    res.status(400).send();
+})
 adminRouter.get('/getTransactions',userAuthAdmin, async(req,res)=>{
     try {
         const data = await getAllTransaction();

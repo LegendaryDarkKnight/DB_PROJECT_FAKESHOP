@@ -77,6 +77,8 @@ const Signup = () => {
             });
             if (!response.ok) {
                 console.error("Network response was not ok");
+                alert('Same mail exists');
+                return ;
             }
 
 

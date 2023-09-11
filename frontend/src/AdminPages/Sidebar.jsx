@@ -84,11 +84,11 @@ const Sidebar = () => {
                                 </div>
                             </Link>
                             <br />
-                            <Link to="/admin/add-customer-care" className="nav-link px-0">
+                            {/* <Link to="/admin/add-customer-care" className="nav-link px-0">
                                 <div className="d-flex align-items-center">
                                     <span className="ms-1 d-none d-sm-inline">Add Customer Care</span>
                                 </div>
-                                </Link>
+                            </Link> */}
                             <br />
                             <hr />
                         </>

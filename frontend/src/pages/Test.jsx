@@ -1,47 +1,65 @@
-import { useState, useEffect } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import React from 'react';
+import { FaShoppingCart, FaUser, FaStore } from 'react-icons/fa';
 
-const LoginChart = () => {
-  // State to store data from the backend
+const cardStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  backgroundColor: '#fff',
+  borderRadius: '8px',
+  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+  padding: '10px',
+  margin: '0px', // Set margin to 0px to eliminate space between cards
+  width: '300px',
+  transition: 'transform 0.2s',
+};
 
-  const [data, setData] = useState();
-  const fetchdata = async()=>{
-    try {
-      const response = await fetch('http://localhost:3000/admin/dailylogin',{
-        method: "GET",
-        headers:
-        {
-          "Content-type": "application/json",
-        },
-        credentials: 'include',
-      })
-      if(response.ok){
-        const data1 = await response.json();
-        setData(data1.rows);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    
-  }
-  useEffect(() => {
-    // Fetch data from your backend API
-    fetchdata();
-  }, []);
+const iconStyle = {
+  fontSize: '32px',
+  marginRight: '16px',
+};
 
+const titleStyle = {
+  fontSize: '20px',
+  margin: '0',
+};
+
+const valueStyle = {
+  fontSize: '24px',
+  margin: '0',
+};
+
+const Card = ({ title, value, icon }) => {
   return (
-    <div>
-      <h2>Login Count Over Time</h2>
-      <LineChart width={800} height={400} data={data} margin={{ top: 20, right: 30, left: 20, bottom: 10 }}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="LOGIN_DATE" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <Line type="monotone" dataKey="LOGIN_COUNT" stroke="#8884d8" activeDot={{ r: 8 }} />
-      </LineChart>
+    <div style={cardStyle}>
+      <div style={iconStyle}>{icon}</div>
+      <div>
+        <h2 style={titleStyle}>{title}</h2>
+        <p style={valueStyle}>{value}</p>
+      </div>
     </div>
   );
 };
 
-export default LoginChart;
+const Dashboard = ({ totalProducts, totalUsers, totalShops }) => {
+  return (
+    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <Card
+        title="Total Products"
+        value={totalProducts} // Get totalProducts from props
+        icon={<FaShoppingCart />}
+      />
+      <Card
+        title="Total Users"
+        value={totalUsers} // Get totalUsers from props
+        icon={<FaUser />}
+      />
+      <Card
+        title="Total Shops"
+        value={totalShops} // Get totalShops from props
+        icon={<FaStore />}
+      />
+    </div>
+  );
+};
+
+export default Dashboard;

@@ -11,37 +11,22 @@ const { userAuth } = require('../middlewares/auth');
 
 publicRouter.post('/signup', async(req,res)=>{
     try {
-        console.log(req.body);
-        await signUp(req.body);
-        res.status(200).send();
+        const results = await logIn(req.body.email.trim());
+        if (results.rows.length === 0) {
+            await signUp(req.body);
+            res.status(200).send();
+        }
+        else
+        {
+            res.status(500).send();
+        }
     } catch (error) {
         console.log(error)
     }
     res.status(400).send();
 });
 
-// publicRouter.post('/login', async (req, res) => {
-//     try {
-//         let results;
-//         results = await logIn(req.body.email.trim());
-//         if (results.rows.length == 0) {
-//             console.log('No  such user');
-//         }
-//         else {
-//             if (req.body.password==results.rows[0].PASS_WORD) {
-//                 loginUser(res, results.rows[0].USER_ID);
-//                 res.json(results);
-//             }
-//             else {
-//                 console.log('No user');
-//             }
-//         }
-//     }
-//     catch (error) {
-//         console.log(error);
-//     }
-//     res.status(401).send();
-// });
+
 publicRouter.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;

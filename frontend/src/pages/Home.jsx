@@ -320,19 +320,7 @@ const Home = () => {
                                  <p className="mb-0">Points: {userData.rows[0].POINTS}</p>
                             </div>}
                         </div>
-                        <div className="card mt-4">
-                            <div className="card-header bg-success text-white">
-                                <h5 className="mb-0">Reviews and Ratings</h5>
-                            </div>
-                            <div className="card-body">
-                                <button className="btn btn-success mt-2 mx-4">
-                                    Add Review
-                                </button>
-                                <button className="btn btn-warning mt-2">
-                                    Show Review
-                                </button>
-                            </div>
-                        </div>
+                        
                         <div className="card mt-4">
                             <div className="card-header bg-warning text-white">
                                 <h5 className="mb-0">Recharge Request</h5>
